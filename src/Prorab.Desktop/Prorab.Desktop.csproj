@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="AtomUI.Desktop.Controls" />
+		<PackageReference Include="Avalonia.Desktop" />
+		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" />
+		<PackageReference Include="System.Security.Cryptography.Pkcs" />
+		<PackageReference Include="System.Security.Cryptography.Xml" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Prorab.UI\Prorab.UI.csproj" />
+	</ItemGroup>
+	<PropertyGroup>
+		<ApplicationIcon>..\Prorab.UI\Assets\prorab.ico</ApplicationIcon>
+	</PropertyGroup>
+</Project>

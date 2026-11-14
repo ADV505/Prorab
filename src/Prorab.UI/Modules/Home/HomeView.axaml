@@ -1,0 +1,11 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Prorab.UI.Modules.Home"
+             xmlns:atom="https://atomui.net"
+             x:Class="Prorab.UI.Modules.Home.HomeView"
+             x:DataType="vm:HomeViewModel">
+  <StackPanel Spacing="12">
+    <TextBlock Text="{Binding Greeting}" FontSize="24" FontWeight="SemiBold"/>
+    <atom:Button ButtonType="Primary" Content="Первый шаг сделан!"/>
+  </StackPanel>
+</UserControl>

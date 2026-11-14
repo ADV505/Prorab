@@ -1,0 +1,44 @@
+<atom:Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:atom="https://atomui.net"
+        xmlns:shell="using:Prorab.UI.Shell"
+        x:Class="Prorab.UI.Shell.MainWindow"
+        x:DataType="shell:ShellViewModel"
+        Icon="avares://Prorab.UI/Assets/prorab_icon.png"
+        Title="Прораб" Width="1100" Height="700"
+             WindowState="Normal"
+             WindowStartupLocation="CenterScreen">
+    <Grid>
+        
+  <Grid ColumnDefinitions="Auto,*">
+      
+    <atom:NavMenu Grid.Column="0" x:Name="SidebarMenu"
+                  Mode="Inline"
+                  HorizontalAlignment="Stretch"
+                  IsItemBackgroundEnabled="False"
+                  Margin="1"
+                  Padding="0"
+                  atom:ScrollViewer.IsLiteMode="True">
+
+      <atom:NavMenu.Header>
+        <Grid Margin="1"  ColumnDefinitions="*,Auto">
+
+          
+          <atom:Button x:Name="CollapseButton"
+                       Grid.Column="1"
+                       ButtonType="Text"
+                       Width="40" Height="40"
+                       Click="HandleToggleCollapsedClick"/>
+        </Grid>
+      </atom:NavMenu.Header>
+
+    </atom:NavMenu>
+       <Border Height="1" Grid.ColumnSpan="2"
+                VerticalAlignment="Top"
+                Background="{atom:SharedTokenResource ColorBorderSecondary}"
+                IsHitTestVisible="False" />
+    <ContentControl   Grid.Column="1" Background="{atom:SharedTokenResource ColorBgLayout}" Content="{Binding Current}" Padding="16" />
+      
+  </Grid>
+  </Grid>
+</atom:Window>
