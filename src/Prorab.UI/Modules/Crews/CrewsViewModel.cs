@@ -25,8 +25,8 @@ public partial class CrewsViewModel : ViewModelBase
         IsLoading = true;
         try
         {
-            await using var db = await _factory.CreateDbContextAsync();
-            await db.Database.EnsureCreatedAsync();
+            await using var db = await _factory.CreateDbContextAsync();           
+            await DbMigration.EnsureMigratedAsync(_factory);
 
             var crews = await db.Crews
                 .Where(c => !c.IsArchived)

@@ -6,6 +6,7 @@ using Prorab.UI.Modules.Crews;
 using Prorab.UI.Modules.Home;
 using Prorab.UI.Modules.ReferenceBooks;
 using Prorab.UI.Modules.Sites;
+using Prorab.UI.Modules.WorkTypes;
 using Prorab.UI.Navigation;
 using Prorab.UI.Shell;
 using Prorab.UI.ViewModels;
@@ -32,6 +33,9 @@ public static class AppServices
 
         .AddSingleton<IReferenceModule, SitesModule>()
         .AddTransient<SitesViewModel>()
+
+        .AddSingleton<IReferenceModule, WorkTypesModule>()
+        .AddTransient<WorkTypesViewModel>()
 
         .AddTransient<CrewsViewModel>()
         .BuildServiceProvider();

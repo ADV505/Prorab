@@ -5,7 +5,8 @@
              xmlns:vm="using:Prorab.UI.Modules.Crews"
              xmlns:crews="using:Prorab.UI.Modules.Crews"
              xmlns:ref="using:Prorab.UI.Modules.ReferenceBooks"
-             xmlns:sites="using:Prorab.UI.Modules.Sites">
+             xmlns:sites="using:Prorab.UI.Modules.Sites"
+             xmlns:wt="using:Prorab.UI.Modules.WorkTypes">
   <Application.DataTemplates>
     <DataTemplate DataType="{x:Type home:HomeViewModel}">
       <home:HomeView/>
@@ -18,6 +19,9 @@
 </DataTemplate>
       <DataTemplate DataType="{x:Type sites:SitesViewModel}">
   <sites:SitesView/>
+</DataTemplate>
+      <DataTemplate DataType="{x:Type wt:WorkTypesViewModel}">
+  <wt:WorkTypesView/>
 </DataTemplate>
   </Application.DataTemplates>
   <Application.Styles>

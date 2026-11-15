@@ -11,6 +11,7 @@
 		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" />
 		<PackageReference Include="System.Security.Cryptography.Pkcs" />
 		<PackageReference Include="System.Security.Cryptography.Xml" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Prorab.UI\Prorab.UI.csproj" />

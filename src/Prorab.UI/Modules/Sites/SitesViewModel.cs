@@ -26,7 +26,7 @@ public partial class SitesViewModel : ViewModelBase
         try
         {
             await using var db = await _factory.CreateDbContextAsync();
-            await db.Database.EnsureCreatedAsync();
+            await DbMigration.EnsureMigratedAsync(_factory);
 
             var sites = await db.Sites
                 .Where(s => !s.IsArchived)
