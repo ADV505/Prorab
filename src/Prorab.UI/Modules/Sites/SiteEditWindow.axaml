@@ -6,11 +6,23 @@
         Title="Новый объект" Width="440" SizeToContent="Height"
         CanResize="False" WindowStartupLocation="CenterOwner">
   <StackPanel Margin="16" Spacing="12">
-    <TextBox PlaceholderText="Название объекта" Text="{Binding Name}"/>
-    <TextBox PlaceholderText="Адрес" Text="{Binding Address}"/>
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-      <Button Content="Отмена" IsCancel="True" Click="OnCancel"/>
-      <Button Content="Сохранить" IsDefault="True" Click="OnSave"/>
+  <TextBox PlaceholderText="Название объекта" Text="{Binding Name}"/>
+  <TextBox PlaceholderText="Адрес" Text="{Binding Address}"/>
+  <Grid ColumnDefinitions="*,*">
+    <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,8,0">
+      <TextBlock Text="Начало работ" FontSize="12" Opacity="0.7"/>
+      <DatePicker SelectedDate="{Binding StartDate}"/>
     </StackPanel>
+    <StackPanel Grid.Column="1" Spacing="4">
+      <TextBlock Text="Окончание работ" FontSize="12" Opacity="0.7"/>
+      <DatePicker SelectedDate="{Binding EndDate}"/>
+    </StackPanel>
+  </Grid>
+  <TextBox PlaceholderText="Сумма контракта, руб." Text="{Binding ContractAmount}"/>
+  <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+    <Button Content="Отмена" IsCancel="True" Click="OnCancel"/>
+    <Button Content="Сохранить" IsDefault="True" Click="OnSave"/>
   </StackPanel>
+</StackPanel>
+
 </Window>

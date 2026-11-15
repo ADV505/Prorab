@@ -24,7 +24,12 @@ public partial class SitesView : UserControl
         var dialog = new SiteEditWindow("Новый объект") { DataContext = edit };
 
         if (await dialog.ShowDialog<bool?>(owner) == true)
-            await viewModel.AddAsync(edit.Name, edit.Address);
+        {
+            decimal.TryParse(edit.ContractAmount?.Replace('.', ','), out var amount);
+            await viewModel.AddAsync(edit.Name, edit.Address,
+                edit.StartDate?.DateTime, edit.EndDate?.DateTime, amount);
+        }
+
     }
 
     private async void OnEdit(object? sender, RoutedEventArgs e)
@@ -33,11 +38,22 @@ public partial class SitesView : UserControl
         if ((sender as Button)?.CommandParameter is not Site site) return;
         if (OwnerWindow is not Window owner) return;
 
-        var edit = new SiteEditViewModel { Name = site.Name, Address = site.Address };
+        var edit = new SiteEditViewModel
+        {
+            Name = site.Name,
+            Address = site.Address,
+            StartDate = site.StartDate,
+            EndDate = site.EndDate,
+            ContractAmount = site.ContractAmount == 0 ? "" : site.ContractAmount.ToString("0.##"),
+        };
         var dialog = new SiteEditWindow("Изменить объект") { DataContext = edit };
 
         if (await dialog.ShowDialog<bool?>(owner) == true)
-            await viewModel.UpdateAsync(site, edit.Name, edit.Address);
+        {
+            decimal.TryParse(edit.ContractAmount?.Replace('.', ','), out var amount);
+            await viewModel.UpdateAsync(site, edit.Name, edit.Address,
+                edit.StartDate?.DateTime, edit.EndDate?.DateTime, amount);
+        }
     }
 
     private async void OnArchive(object? sender, RoutedEventArgs e)

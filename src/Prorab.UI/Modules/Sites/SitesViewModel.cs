@@ -44,12 +44,20 @@ public partial class SitesViewModel : ViewModelBase
         OnPropertyChanged(nameof(HasSites));
     }
 
-    public async Task AddAsync(string name, string? address)
+    public async Task AddAsync(string name, string? address,
+    DateTime? startDate, DateTime? endDate, decimal contractAmount)
     {
         name = name.Trim();
         if (name.Length == 0) return;
 
-        var site = new Site { Name = name, Address = address };
+        var site = new Site
+        {
+            Name = name,
+            Address = address,
+            StartDate = startDate,
+            EndDate = endDate,
+            ContractAmount = contractAmount,
+        };
 
         await using var db = await _factory.CreateDbContextAsync();
         db.Sites.Add(site);
@@ -59,13 +67,17 @@ public partial class SitesViewModel : ViewModelBase
         OnPropertyChanged(nameof(HasSites));
     }
 
-    public async Task UpdateAsync(Site site, string name, string? address)
+    public async Task UpdateAsync(Site site, string name, string? address,
+    DateTime? startDate, DateTime? endDate, decimal contractAmount)
     {
         name = name.Trim();
         if (name.Length == 0) return;
 
         site.Name = name;
         site.Address = address;
+        site.StartDate = startDate;
+        site.EndDate = endDate;
+        site.ContractAmount = contractAmount;
 
         await using var db = await _factory.CreateDbContextAsync();
         db.Sites.Update(site);
@@ -73,7 +85,7 @@ public partial class SitesViewModel : ViewModelBase
 
         var index = Sites.IndexOf(site);
         if (index >= 0)
-            Sites.Move(index, 0); // простая перетасовка; при желании заменим на перечитку
+            Sites.Move(index, 0);
     }
 
     public async Task ArchiveAsync(Site site)
