@@ -1,7 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Prorab.UI.Modules.Common;
 
-namespace Prorab.UI.Modules.Crews;
+namespace Prorab.UI.Modules.Common;
 
 public partial class ConfirmWindow : Window
 {

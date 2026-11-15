@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Prorab.Core.Models;
+using Prorab.UI.Modules.Common;
 
 namespace Prorab.UI.Modules.Crews;
 
