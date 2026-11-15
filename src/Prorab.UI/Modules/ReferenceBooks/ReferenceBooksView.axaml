@@ -7,11 +7,11 @@
              x:Class="Prorab.UI.Modules.ReferenceBooks.ReferenceBooksView"
              x:DataType="vm:ReferenceBooksViewModel">
 
-  <Panel Background="{atom:SharedTokenResource ColorBgLayout}">
+  <Panel >
       
     <!-- Хаб: плитки -->
     <ScrollViewer IsVisible="{Binding IsHome}">
-      <StackPanel Margin="24,24,5,5" Spacing="12">
+      <StackPanel Margin="24,24,24,5" Spacing="12">
         <TextBlock Margin ="18,0,0,0" Text="Справочники" FontSize="24" FontWeight="SemiBold"/>
         <TextBlock Margin ="18,0,0,0" Text="Объекты, Субподрядчики, Прайс работ" FontSize="14"/>
         <ItemsControl ItemsSource="{Binding Books}" >
@@ -47,7 +47,7 @@
 
     <!-- Открытый справочник -->
     <DockPanel IsVisible="{Binding !IsHome}" >
-      <Button DockPanel.Dock="Top" Command="{Binding BackCommand}" 
+      <atom:Button DockPanel.Dock="Top" Command="{Binding BackCommand}" 
               Content="← Все справочники" HorizontalAlignment="Left" Margin="16,24,5,5"/>
       <ContentControl Content="{Binding Current}"/>
     </DockPanel>

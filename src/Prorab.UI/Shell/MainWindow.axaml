@@ -37,7 +37,7 @@
                 VerticalAlignment="Top"
                 Background="{atom:SharedTokenResource ColorBorderSecondary}"
                 IsHitTestVisible="False" />
-    <ContentControl   Grid.Column="1"  Content="{Binding Current}" Padding="1"  />
+    <ContentControl Background="{atom:SharedTokenResource ColorBgLayout}"  Grid.Column="1"  Content="{Binding Current}" Padding="1"  />
       
   </Grid>
   </Grid>

@@ -2,13 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Prorab.UI.Modules.Crews"
              xmlns:core="using:Prorab.Core.Models"
+             xmlns:atom="https://atomui.net"
              x:Class="Prorab.UI.Modules.Crews.CrewsView"
              x:DataType="vm:CrewsViewModel">
 
-  <DockPanel>
+  <DockPanel Margin="24,24,24,5">
     <DockPanel DockPanel.Dock="Top" Margin="0,4,0,12">
       <TextBlock Text="Бригады" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-      <Button Content="＋ Добавить" Click="OnAdd" HorizontalAlignment="Right"
+      <atom:Button Content="＋ Добавить" Click="OnAdd" HorizontalAlignment="Right"
               HorizontalContentAlignment="Center" Padding="16,6"/>
     </DockPanel>
 
