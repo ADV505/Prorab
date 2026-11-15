@@ -18,8 +18,11 @@
       <DatePicker SelectedDate="{Binding EndDate}"/>
     </StackPanel>
   </Grid>
+      <TextBox PlaceholderText="Номер договора" Text="{Binding ContractNumber}"/>
+
   <TextBox PlaceholderText="Сумма контракта, руб." Text="{Binding ContractAmount}"/>
-  <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+  
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
     <Button Content="Отмена" IsCancel="True" Click="OnCancel"/>
     <Button Content="Сохранить" IsDefault="True" Click="OnSave"/>
   </StackPanel>

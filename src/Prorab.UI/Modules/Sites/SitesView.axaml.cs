@@ -27,7 +27,7 @@ public partial class SitesView : UserControl
         {
             decimal.TryParse(edit.ContractAmount?.Replace('.', ','), out var amount);
             await viewModel.AddAsync(edit.Name, edit.Address,
-                edit.StartDate?.DateTime, edit.EndDate?.DateTime, amount);
+    edit.StartDate?.DateTime, edit.EndDate?.DateTime, edit.ContractNumber, amount);
         }
 
     }
@@ -44,7 +44,9 @@ public partial class SitesView : UserControl
             Address = site.Address,
             StartDate = site.StartDate,
             EndDate = site.EndDate,
+            ContractNumber = site.ContractNumber,
             ContractAmount = site.ContractAmount == 0 ? "" : site.ContractAmount.ToString("0.##"),
+
         };
         var dialog = new SiteEditWindow("Изменить объект") { DataContext = edit };
 
@@ -52,7 +54,7 @@ public partial class SitesView : UserControl
         {
             decimal.TryParse(edit.ContractAmount?.Replace('.', ','), out var amount);
             await viewModel.UpdateAsync(site, edit.Name, edit.Address,
-                edit.StartDate?.DateTime, edit.EndDate?.DateTime, amount);
+                edit.StartDate?.DateTime, edit.EndDate?.DateTime, edit.ContractNumber,amount);
         }
     }
 

@@ -55,6 +55,9 @@ namespace Infrastructure.Migrations
                     b.Property<decimal>("ContractAmount")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ContractNumber")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("TEXT");
 

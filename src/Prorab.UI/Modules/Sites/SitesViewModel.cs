@@ -15,6 +15,7 @@ public partial class SitesViewModel : ViewModelBase
 
     [ObservableProperty] private bool _isLoading;
 
+
     public bool HasSites => Sites.Count > 0;
 
     public SitesViewModel(IDbContextFactory<AppDbContext> factory) => _factory = factory;
@@ -45,7 +46,7 @@ public partial class SitesViewModel : ViewModelBase
     }
 
     public async Task AddAsync(string name, string? address,
-    DateTime? startDate, DateTime? endDate, decimal contractAmount)
+    DateTime? startDate, DateTime? endDate, string? contractNumber, decimal contractAmount)
     {
         name = name.Trim();
         if (name.Length == 0) return;
@@ -56,6 +57,7 @@ public partial class SitesViewModel : ViewModelBase
             Address = address,
             StartDate = startDate,
             EndDate = endDate,
+            ContractNumber = contractNumber,
             ContractAmount = contractAmount,
         };
 
@@ -68,7 +70,7 @@ public partial class SitesViewModel : ViewModelBase
     }
 
     public async Task UpdateAsync(Site site, string name, string? address,
-    DateTime? startDate, DateTime? endDate, decimal contractAmount)
+        DateTime? startDate, DateTime? endDate, string? contractNumber, decimal contractAmount)
     {
         name = name.Trim();
         if (name.Length == 0) return;
@@ -77,16 +79,18 @@ public partial class SitesViewModel : ViewModelBase
         site.Address = address;
         site.StartDate = startDate;
         site.EndDate = endDate;
+        site.ContractNumber = contractNumber;
         site.ContractAmount = contractAmount;
 
         await using var db = await _factory.CreateDbContextAsync();
         db.Sites.Update(site);
         await db.SaveChangesAsync();
 
-        var index = Sites.IndexOf(site);
-        if (index >= 0)
-            Sites.Move(index, 0);
+        Sites.Remove(site);
+        Sites.Add(site);
+        OnPropertyChanged(nameof(HasSites));
     }
+
 
     public async Task ArchiveAsync(Site site)
     {
