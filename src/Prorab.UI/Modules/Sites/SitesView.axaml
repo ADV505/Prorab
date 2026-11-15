@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Prorab.UI.Modules.Sites"
+             xmlns:core="using:Prorab.Core.Models"
+             x:Class="Prorab.UI.Modules.Sites.SitesView"
+             x:DataType="vm:SitesViewModel">
+
+  <DockPanel>
+    <DockPanel DockPanel.Dock="Top" Margin="0,4,0,12">
+      <TextBlock Text="Объекты" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
+      <Button Content="＋ Добавить" Click="OnAdd" HorizontalAlignment="Right"
+              HorizontalContentAlignment="Center" Padding="16,6"/>
+    </DockPanel>
+
+    <ScrollViewer>
+      <StackPanel Spacing="12">
+        <TextBlock Text="Пока нет объектов — добавьте первый."
+                   IsVisible="{Binding !HasSites}" Opacity="0.6"/>
+        <ItemsControl ItemsSource="{Binding Sites}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="core:Site">
+              <Border Padding="16,12" CornerRadius="8" Margin="0,0,0,8"
+                      Background="{DynamicResource RegionBrush}">
+                <Grid ColumnDefinitions="*,Auto,Auto,Auto">
+                  <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding Address}" Opacity="0.7" FontSize="12"/>
+                  </StackPanel>
+                  <Button Grid.Column="1" Content="Изменить" Margin="0,0,8,0"
+                          Click="OnEdit" CommandParameter="{Binding}"/>
+                  <Button Grid.Column="2" Content="Архивировать" Margin="0,0,8,0"
+                          Click="OnArchive" CommandParameter="{Binding}"/>
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

@@ -1,0 +1,16 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Prorab.UI.Modules.Sites"
+        x:Class="Prorab.UI.Modules.Sites.SiteEditWindow"
+        x:DataType="vm:SiteEditViewModel"
+        Title="Новый объект" Width="440" SizeToContent="Height"
+        CanResize="False" WindowStartupLocation="CenterOwner">
+  <StackPanel Margin="16" Spacing="12">
+    <TextBox PlaceholderText="Название объекта" Text="{Binding Name}"/>
+    <TextBox PlaceholderText="Адрес" Text="{Binding Address}"/>
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+      <Button Content="Отмена" IsCancel="True" Click="OnCancel"/>
+      <Button Content="Сохранить" IsDefault="True" Click="OnSave"/>
+    </StackPanel>
+  </StackPanel>
+</Window>
