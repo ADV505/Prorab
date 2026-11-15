@@ -7,7 +7,7 @@
              xmlns:ref="using:Prorab.UI.Modules.ReferenceBooks"
              xmlns:sites="using:Prorab.UI.Modules.Sites">
   <Application.DataTemplates>
-    <DataTemplate DataType="home:HomeViewModel">
+    <DataTemplate DataType="{x:Type home:HomeViewModel}">
       <home:HomeView/>
     </DataTemplate>
       <DataTemplate DataType="{x:Type vm:CrewsViewModel}">
