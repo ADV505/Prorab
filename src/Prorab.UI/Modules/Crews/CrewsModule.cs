@@ -9,8 +9,8 @@ public class CrewsModule(IServiceProvider services) : IReferenceModule
 {
     public string Id => "crews";
     public string Title => "Бригады";
-    public string Description => "Состав бригад, прорабы, контакты";
-    public AntDesignIconKind Icon => AntDesignIconKind.TeamOutlined;
+    public string Description => "Состав бригад, договора";
+    public AntDesignIconKind Icon => AntDesignIconKind.ContactsTwoTone;
 
     public ViewModelBase CreateViewModel()
     {

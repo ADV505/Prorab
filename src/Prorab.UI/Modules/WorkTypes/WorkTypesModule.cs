@@ -10,7 +10,7 @@ public class WorkTypesModule(IServiceProvider services) : IReferenceModule
     public string Id => "work-types";
     public string Title => "Виды работ";
     public string Description => "Список работ с единицами измерения";
-    public AntDesignIconKind Icon => AntDesignIconKind.ToolOutlined;
+    public AntDesignIconKind Icon => AntDesignIconKind.ToolTwoTone;
 
     public ViewModelBase CreateViewModel()
     {
