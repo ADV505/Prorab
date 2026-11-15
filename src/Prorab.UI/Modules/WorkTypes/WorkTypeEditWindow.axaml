@@ -8,7 +8,9 @@
   <StackPanel Margin="16" Spacing="12">
     <TextBox PlaceholderText="Название (например, Кладка кирпича)" Text="{Binding Name}"/>
     <TextBox PlaceholderText="Единица измерения (м², шт., смена)" Text="{Binding Unit}"/>
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+    <TextBox PlaceholderText="Базовая цена за единицу, руб." Text="{Binding BasePrice}"/>
+
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
       <Button Content="Отмена" IsCancel="True" Click="OnCancel"/>
       <Button Content="Сохранить" IsDefault="True" Click="OnSave"/>
     </StackPanel>

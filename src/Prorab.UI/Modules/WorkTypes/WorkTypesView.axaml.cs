@@ -24,7 +24,10 @@ public partial class WorkTypesView : UserControl
         var dialog = new WorkTypeEditWindow("Новый вид работ") { DataContext = edit };
 
         if (await dialog.ShowDialog<bool?>(owner) == true)
-            await viewModel.AddAsync(edit.Name, edit.Unit);
+        {
+            decimal.TryParse(edit.BasePrice?.Replace('.', ','), out var basePrice);
+            await viewModel.AddAsync(edit.Name, edit.Unit, basePrice);
+        }
     }
 
     private async void OnEdit(object? sender, RoutedEventArgs e)
@@ -33,12 +36,21 @@ public partial class WorkTypesView : UserControl
         if ((sender as Button)?.CommandParameter is not WorkType workType) return;
         if (OwnerWindow is not Window owner) return;
 
-        var edit = new WorkTypeEditViewModel { Name = workType.Name, Unit = workType.Unit };
+        var edit = new WorkTypeEditViewModel
+        {
+            Name = workType.Name,
+            Unit = workType.Unit,
+            BasePrice = workType.BasePrice == 0 ? "" : workType.BasePrice.ToString("0.##"),
+        };
         var dialog = new WorkTypeEditWindow("Изменить вид работ") { DataContext = edit };
 
         if (await dialog.ShowDialog<bool?>(owner) == true)
-            await viewModel.UpdateAsync(workType, edit.Name, edit.Unit);
+        {
+            decimal.TryParse(edit.BasePrice?.Replace('.', ','), out var basePrice);
+            await viewModel.UpdateAsync(workType, edit.Name, edit.Unit, basePrice);
+        }
     }
+
 
     private async void OnArchive(object? sender, RoutedEventArgs e)
     {

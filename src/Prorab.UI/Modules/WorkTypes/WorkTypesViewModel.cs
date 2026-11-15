@@ -44,12 +44,12 @@ public partial class WorkTypesViewModel : ViewModelBase
         OnPropertyChanged(nameof(HasWorkTypes));
     }
 
-    public async Task AddAsync(string name, string? unit)
+    public async Task AddAsync(string name, string? unit, decimal basePrice)
     {
         name = name.Trim();
         if (name.Length == 0) return;
 
-        var workType = new WorkType { Name = name, Unit = unit };
+        var workType = new WorkType { Name = name, Unit = unit, BasePrice = basePrice };
 
         await using var db = await _factory.CreateDbContextAsync();
         db.WorkTypes.Add(workType);
@@ -59,13 +59,14 @@ public partial class WorkTypesViewModel : ViewModelBase
         OnPropertyChanged(nameof(HasWorkTypes));
     }
 
-    public async Task UpdateAsync(WorkType workType, string name, string? unit)
+    public async Task UpdateAsync(WorkType workType, string name, string? unit, decimal basePrice)
     {
         name = name.Trim();
         if (name.Length == 0) return;
 
         workType.Name = name;
         workType.Unit = unit;
+        workType.BasePrice = basePrice;
 
         await using var db = await _factory.CreateDbContextAsync();
         db.WorkTypes.Update(workType);

@@ -7,4 +7,5 @@ public partial class WorkTypeEditViewModel : ViewModelBase
 {
     [ObservableProperty] private string _name = "";
     [ObservableProperty] private string? _unit;
+    [ObservableProperty] private string? _basePrice;
 }

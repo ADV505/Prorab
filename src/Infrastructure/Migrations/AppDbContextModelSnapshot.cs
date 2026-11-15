@@ -71,6 +71,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal>("BasePrice")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsArchived")
                         .HasColumnType("INTEGER");
 

@@ -23,9 +23,10 @@
                       Background="{DynamicResource RegionBrush}">
                 <Grid ColumnDefinitions="*,Auto,Auto,Auto">
                   <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
-                    <TextBlock Text="{Binding Unit}" Opacity="0.7" FontSize="12"/>
-                  </StackPanel>
+  <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
+  <TextBlock Text="{Binding PriceInfo}" Opacity="0.7" FontSize="12"/>
+</StackPanel>
+
                   <Button Grid.Column="1" Content="Изменить" Margin="0,0,8,0"
                           Click="OnEdit" CommandParameter="{Binding}"/>
                   <Button Grid.Column="2" Content="Архивировать"
