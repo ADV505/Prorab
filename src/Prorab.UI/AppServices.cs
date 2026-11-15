@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Prorab.Infrastructure.Data;
+using Prorab.UI.Modules;
+using Prorab.UI.Modules.Crews;
 using Prorab.UI.Modules.Home;
+using Prorab.UI.Modules.ReferenceBooks;
 using Prorab.UI.Navigation;
 using Prorab.UI.Shell;
 using Prorab.UI.ViewModels;
@@ -21,5 +24,11 @@ public static class AppServices
         .AddTransient<HomeViewModel>()
         // 3. Shell — без неё окно вообще не открылось бы
         .AddSingleton<ShellViewModel>()
+
+        .AddSingleton<INavigationModule, ReferenceBooksModule>()
+        .AddSingleton<IReferenceModule, CrewsModule>()
+        .AddTransient<ReferenceBooksViewModel>()
+
+        .AddTransient<CrewsViewModel>()
         .BuildServiceProvider();
 }

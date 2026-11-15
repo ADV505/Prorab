@@ -1,11 +1,20 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Prorab.UI.App"
-             xmlns:home="using:Prorab.UI.Modules.Home">
+             xmlns:home="using:Prorab.UI.Modules.Home"
+             xmlns:vm="using:Prorab.UI.Modules.Crews"
+             xmlns:crews="using:Prorab.UI.Modules.Crews"
+             xmlns:ref="using:Prorab.UI.Modules.ReferenceBooks">
   <Application.DataTemplates>
     <DataTemplate DataType="home:HomeViewModel">
       <home:HomeView/>
     </DataTemplate>
+      <DataTemplate DataType="{x:Type vm:CrewsViewModel}">
+  <crews:CrewsView/>
+</DataTemplate>
+      <DataTemplate DataType="{x:Type ref:ReferenceBooksViewModel}">
+  <ref:ReferenceBooksView/>
+</DataTemplate>
   </Application.DataTemplates>
   <Application.Styles>
     <FluentTheme/>

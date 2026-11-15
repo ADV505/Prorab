@@ -1,0 +1,17 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Prorab.UI.Modules.Crews"
+        x:Class="Prorab.UI.Modules.Crews.CrewEditWindow"
+        x:DataType="vm:CrewEditViewModel"
+        Title="Новая бригада" Width="420" SizeToContent="Height"
+        CanResize="False" WindowStartupLocation="CenterOwner">
+  <StackPanel Margin="16" Spacing="12">
+    <TextBox PlaceholderText="Название бригады" Text="{Binding Name}"/>
+    <TextBox PlaceholderText="Прораб" Text="{Binding ForemanName}"/>
+    <TextBox PlaceholderText="Телефон" Text="{Binding Phone}"/>
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+      <Button Content="Отмена" IsCancel="True" Click="OnCancel"/>
+      <Button Content="Сохранить" IsDefault="True" Click="OnSave"/>
+    </StackPanel>
+  </StackPanel>
+</Window>

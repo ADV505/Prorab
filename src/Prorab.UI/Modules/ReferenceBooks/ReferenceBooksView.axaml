@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:icons="using:AtomUI.Icons.AntDesign"
+             xmlns:vm="using:Prorab.UI.Modules.ReferenceBooks"
+             x:Class="Prorab.UI.Modules.ReferenceBooks.ReferenceBooksView"
+             x:DataType="vm:ReferenceBooksViewModel">
+
+  <Panel>
+    <!-- Хаб: плитки -->
+    <ScrollViewer IsVisible="{Binding IsHome}">
+      <StackPanel Margin="0,4,0,0" Spacing="12">
+        <TextBlock Text="Справочники" FontSize="24" FontWeight="SemiBold"/>
+
+        <ItemsControl ItemsSource="{Binding Books}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Button Command="{Binding $parent[ItemsControl].DataContext.OpenCommand}"
+                      CommandParameter="{Binding Id}"
+                      HorizontalContentAlignment="Stretch" Padding="0" Margin="0,0,12,12">
+                <Border Width="260" Padding="16" CornerRadius="8"
+                        Background="{DynamicResource RegionBrush}">
+                  <StackPanel Spacing="6">
+                   <!-- <icons:IconOutLine Kind="{Binding Icon}" Width="24" Height="24"/>-->
+                    <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap"
+                               FontSize="12" Opacity="0.7"/>
+                  </StackPanel>
+                </Border>
+              </Button>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- Открытый справочник -->
+    <DockPanel IsVisible="{Binding !IsHome}">
+      <Button DockPanel.Dock="Top" Command="{Binding BackCommand}"
+              Content="← Все справочники" HorizontalAlignment="Left" Margin="0,4,0,8"/>
+      <ContentControl Content="{Binding Current}"/>
+    </DockPanel>
+  </Panel>
+</UserControl>
