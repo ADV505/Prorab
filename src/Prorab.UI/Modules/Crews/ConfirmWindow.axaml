@@ -1,0 +1,15 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Prorab.UI.Modules.Crews"
+        x:Class="Prorab.UI.Modules.Crews.ConfirmWindow"
+        x:DataType="vm:ConfirmViewModel"
+        Title="Подтверждение" Width="380" SizeToContent="Height"
+        CanResize="False" WindowStartupLocation="CenterOwner">
+  <StackPanel Margin="16" Spacing="12">
+    <TextBlock Text="{Binding Message}" TextWrapping="Wrap"/>
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+      <Button Content="Архивировать" Click="OnOk"/>
+      <Button Content="Отмена" IsCancel="True" Click="OnCancel"/>
+    </StackPanel>
+  </StackPanel>
+</Window>

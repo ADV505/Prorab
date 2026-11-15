@@ -59,4 +59,41 @@ public partial class CrewsViewModel : ViewModelBase
         OnPropertyChanged(nameof(HasCrews));
     }
 
+    public async Task UpdateAsync(Crew crew, string name, string? foremanName, string? phone)
+    {
+        name = name.Trim();
+        if (name.Length == 0) return;
+
+        crew.Name = name;
+        crew.ForemanName = foremanName;
+        crew.Phone = phone;
+
+        await using var db = await _factory.CreateDbContextAsync();
+        db.Crews.Update(crew);
+        await db.SaveChangesAsync();
+
+        // Обновим позицию сортировки, если имя поменялось
+        var index = Crews.IndexOf(crew);
+        if (index >= 0)
+        {
+            Crews.Remove(crew);
+            var newIndex = Crews.IndexOf(Crews.FirstOrDefault(c => string.Compare(c.Name, name, StringComparison.Ordinal) > 0) ?? Crews[^1]) + 1;
+            if (newIndex > Crews.Count) newIndex = Crews.Count;
+            Crews.Insert(newIndex, crew);
+        }
+    }
+
+    public async Task ArchiveAsync(Crew crew)
+    {
+        crew.IsArchived = true;
+
+        await using var db = await _factory.CreateDbContextAsync();
+        db.Crews.Update(crew);
+        await db.SaveChangesAsync();
+
+        Crews.Remove(crew);
+        OnPropertyChanged(nameof(HasCrews));
+    }
+
+
 }

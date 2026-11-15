@@ -21,14 +21,19 @@
             <DataTemplate x:DataType="core:Crew">
               <Border Padding="16,12" CornerRadius="8" Margin="0,0,0,8"
                       Background="{DynamicResource RegionBrush}">
-                <Grid ColumnDefinitions="*,Auto">
-                  <TextBlock Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                  <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="16"
-                              VerticalAlignment="Center" Opacity="0.7">
-                    <TextBlock Text="{Binding ForemanName}"/>
-                    <TextBlock Text="{Binding Phone}"/>
-                  </StackPanel>
-                </Grid>
+                <Grid ColumnDefinitions="*,Auto,Auto,Auto">
+  <TextBlock Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+  <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="16"
+              VerticalAlignment="Center" Opacity="0.7" Margin="0,0,16,0">
+    <TextBlock Text="{Binding ForemanName}"/>
+    <TextBlock Text="{Binding Phone}"/>
+  </StackPanel>
+  <Button Grid.Column="2" Content="Изменить" Margin="0,0,8,0"
+          Click="OnEdit" CommandParameter="{Binding}"/>
+  <Button Grid.Column="3" Content="Архивировать" Click="OnArchive"
+          CommandParameter="{Binding}"/>
+</Grid>
+
               </Border>
             </DataTemplate>
           </ItemsControl.ItemTemplate>
