@@ -1,8 +1,48 @@
-﻿using Prorab.UI.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.EntityFrameworkCore;
+using Prorab.Infrastructure.Data;
+using Prorab.UI.ViewModels;
 
 namespace Prorab.UI.Modules.Home;
 
-public class HomeViewModel : ViewModelBase
+public partial class HomeViewModel : ViewModelBase
 {
+    private readonly IDbContextFactory<AppDbContext> _factory;
+    /// <summary>Приветствие в шапке главной.</summary>
     public string Greeting => "Прораб. Стройучёт — добро пожаловать!";
+    [ObservableProperty] private bool _isLoading;
+    [ObservableProperty] private int _activeSites;
+    [ObservableProperty] private int _overdueSites;
+
+    /// <summary>Есть просроченные — карточка подкрашивается.</summary>
+    public bool HasOverdue => OverdueSites > 0;
+
+    public HomeViewModel(IDbContextFactory<AppDbContext> factory) => _factory = factory;
+
+    public async Task LoadAsync()
+    {
+        if (IsLoading) return;
+        IsLoading = true;
+        try
+        {
+            await using var db = await _factory.CreateDbContextAsync();
+            await DbMigration.EnsureMigratedAsync(_factory);
+
+            var today = DateTime.Today;
+
+            // Действующий: срок не указан (работа без жёсткого дедлайна) или ещё не наступил.
+            ActiveSites = await db.Sites.CountAsync(s =>
+                !s.IsArchived && (s.EndDate == null || s.EndDate >= today));
+
+            // Срок вышел — для дашборда трактуем как «просроченные».
+            OverdueSites = await db.Sites.CountAsync(s =>
+                !s.IsArchived && s.EndDate != null && s.EndDate < today);
+
+            OnPropertyChanged(nameof(HasOverdue));
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
 }
