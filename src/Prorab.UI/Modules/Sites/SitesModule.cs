@@ -10,7 +10,7 @@ public class SitesModule(IServiceProvider services) : IReferenceModule
     public string Id => "sites";
     public string Title => "Объекты";
     public string Description => "Стройплощадки, адреса, заказчики";
-    public AntDesignIconKind Icon => AntDesignIconKind.EnvironmentTwoTone;
+    public AntDesignIconKind Icon => AntDesignIconKind.EnvironmentOutlined;
 
     public ViewModelBase CreateViewModel()
     {

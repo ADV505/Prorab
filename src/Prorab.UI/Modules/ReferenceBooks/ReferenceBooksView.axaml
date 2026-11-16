@@ -12,6 +12,9 @@
     <!-- Хаб: плитки -->
     <ScrollViewer IsVisible="{Binding IsHome}">
       <StackPanel Margin="24,24,24,5" Spacing="12">
+          <!--<atom:Descriptions Header="Справочники" Margin ="18,0,0,0" FontSize="24" FontWeight="SemiBold">
+              <atom:DescriptionItem Content="Объекты, Субподрядчики, Прайс работ" />
+         </atom:Descriptions>-->
         <TextBlock Margin ="18,0,0,0" Text="Справочники" FontSize="24" FontWeight="SemiBold"/>
         <TextBlock Margin ="18,0,0,0" Text="Объекты, Субподрядчики, Прайс работ" FontSize="14"/>
         <ItemsControl ItemsSource="{Binding Books}" >
@@ -29,7 +32,7 @@
  <atom:Card IsHoverable="True" MinWidth="300"  HorizontalAlignment="Left">
         <atom:CardMetaContent Header="{Binding Title}">
             <atom:CardMetaContent.Avatar>
-                <atom:Avatar Icon="{Binding Icon, Converter={StaticResource KindToIcon}}"/>
+                <atom:Avatar Icon="{Binding Icon, Converter={StaticResource KindToIcon}}" Background="CadetBlue"/>
             </atom:CardMetaContent.Avatar>
             <StackPanel Orientation="Vertical" Spacing="3">
                 <atom:TextBlock Text="{Binding Description}" />
