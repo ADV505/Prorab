@@ -31,23 +31,31 @@ public partial class WorkTypesViewModel : ViewModelBase
     private readonly IDbContextFactory<AppDbContext> _factory;
     private readonly LocalGridSource<WorkType> _gridSource;
 
+    /// <summary>Полный список активных записей (без учёта фильтра).</summary>
+    private List<WorkType> _all = [];
+
     /// <summary>Источник для atom:DataGrid — биндится в XAML к ItemsSource.</summary>
     public DataGridLocalSource<WorkType> WorkTypesSource => _gridSource.Source;
 
-    /// <summary>Живая коллекция строк: в неё пишут Add/Update/Archive — грид обновится сам.</summary>
+    /// <summary>Живая коллекция строк — отфильтрованный срез _all.</summary>
     public ObservableCollection<WorkType> WorkTypes => _gridSource.Rows;
 
     [ObservableProperty] private bool _isLoading;
+
+    /// <summary>Поисковая строка. Фильтрация — по первым буквам названия, без учёта регистра.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasWorkTypes))]
+    private string _searchText = string.Empty;
 
     public bool HasWorkTypes => WorkTypes.Count > 0;
 
     public WorkTypesViewModel(IDbContextFactory<AppDbContext> factory)
     {
         _factory = factory;
-        // Источник создаётся один раз поверх пустой коллекции.
-        // Данные зальются в LoadAsync — биндинг при этом не меняется.
         _gridSource = new LocalGridSource<WorkType>([], WorkTypeDescriptors.Base);
     }
+
+    partial void OnSearchTextChanged(string value) => ApplyFilter();
 
     public async Task LoadAsync()
     {
@@ -58,20 +66,17 @@ public partial class WorkTypesViewModel : ViewModelBase
             await using var db = await _factory.CreateDbContextAsync();
             await DbMigration.EnsureMigratedAsync(_factory);
 
-            var workTypes = await db.WorkTypes
+            _all = await db.WorkTypes
                 .Where(w => !w.IsArchived)
                 .OrderBy(w => w.Name)
                 .ToListAsync();
 
-            WorkTypes.Clear();
-            foreach (var workType in workTypes)
-                WorkTypes.Add(workType);
+            ApplyFilter();
         }
         finally
         {
             IsLoading = false;
         }
-        OnPropertyChanged(nameof(HasWorkTypes));
     }
 
     public async Task AddAsync(string name, string? unit, decimal basePrice)
@@ -85,8 +90,10 @@ public partial class WorkTypesViewModel : ViewModelBase
         db.WorkTypes.Add(workType);
         await db.SaveChangesAsync();
 
-        WorkTypes.Add(workType);
-        OnPropertyChanged(nameof(HasWorkTypes));
+        // Вставляем на алфавитное место и в мастер-список, и в видимую коллекцию.
+        _all.Add(workType);
+        _all.Sort(static (a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
+        ApplyFilter();
     }
 
     public async Task UpdateAsync(WorkType workType, string name, string? unit, decimal basePrice)
@@ -102,9 +109,9 @@ public partial class WorkTypesViewModel : ViewModelBase
         db.WorkTypes.Update(workType);
         await db.SaveChangesAsync();
 
-        WorkTypes.Remove(workType);
-        WorkTypes.Add(workType);
-        OnPropertyChanged(nameof(HasWorkTypes));
+        // Пересортировка: после правки названия строка должна встать на своё место.
+        _all.Sort(static (a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
+        ApplyFilter();
     }
 
     public async Task ArchiveAsync(WorkType workType)
@@ -115,7 +122,25 @@ public partial class WorkTypesViewModel : ViewModelBase
         db.WorkTypes.Update(workType);
         await db.SaveChangesAsync();
 
-        WorkTypes.Remove(workType);
+        _all.Remove(workType);
+        ApplyFilter();
+    }
+
+    /// <summary>Пересобирает видимую коллекцию по текущему SearchText.</summary>
+    private void ApplyFilter()
+    {
+        var filter = SearchText.Trim();
+        var rows = _gridSource.Rows;
+
+        rows.Clear();
+        foreach (var workType in _all)
+        {
+            if (filter.Length == 0 ||
+                workType.Name.StartsWith(filter, StringComparison.OrdinalIgnoreCase))
+            {
+                rows.Add(workType);
+            }
+        }
         OnPropertyChanged(nameof(HasWorkTypes));
     }
 }
