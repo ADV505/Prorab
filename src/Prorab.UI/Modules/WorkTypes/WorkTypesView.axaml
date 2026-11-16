@@ -1,42 +1,65 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:atom="https://atomui.net"
              xmlns:vm="using:Prorab.UI.Modules.WorkTypes"
              xmlns:core="using:Prorab.Core.Models"
              x:Class="Prorab.UI.Modules.WorkTypes.WorkTypesView"
              x:DataType="vm:WorkTypesViewModel">
 
-  <DockPanel>
-    <DockPanel DockPanel.Dock="Top" Margin="0,4,0,12">
-      <TextBlock Text="Виды работ" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-      <Button Content="＋ Добавить" Click="OnAdd" HorizontalAlignment="Right"
-              HorizontalContentAlignment="Center" Padding="16,6"/>
-    </DockPanel>
+  <Panel Background="{atom:SharedTokenResource ColorBgLayout}">
+    <StackPanel Margin="24" Spacing="12">
 
-    <ScrollViewer>
-      <StackPanel Spacing="12">
-        <TextBlock Text="Пока нет видов работ — добавьте первый."
-                   IsVisible="{Binding !HasWorkTypes}" Opacity="0.6"/>
-        <ItemsControl ItemsSource="{Binding WorkTypes}">
-          <ItemsControl.ItemTemplate>
-            <DataTemplate x:DataType="core:WorkType">
-              <Border Padding="16,12" CornerRadius="8" Margin="0,0,0,8"
-                      Background="{DynamicResource RegionBrush}">
-                <Grid ColumnDefinitions="*,Auto,Auto,Auto">
-                  <StackPanel VerticalAlignment="Center">
-  <TextBlock Text="{Binding Name}" FontWeight="SemiBold"/>
-  <TextBlock Text="{Binding PriceInfo}" Opacity="0.7" FontSize="12"/>
-</StackPanel>
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBlock Text="Виды работ" FontSize="24" FontWeight="SemiBold"/>
+        <atom:Button ButtonType="Primary" Grid.Column="1" Content="Добавить вид работ"
+                Classes="Primary" Click="OnAdd"/>
+      </Grid>
 
-                  <Button Grid.Column="1" Content="Изменить" Margin="0,0,8,0"
-                          Click="OnEdit" CommandParameter="{Binding}"/>
-                  <Button Grid.Column="2" Content="Архивировать"
-                          Click="OnArchive" CommandParameter="{Binding}"/>
-                </Grid>
-              </Border>
-            </DataTemplate>
-          </ItemsControl.ItemTemplate>
-        </ItemsControl>
-      </StackPanel>
-    </ScrollViewer>
-  </DockPanel>
+      <atom:DataGrid 
+          ItemsSource="{Binding WorkTypesSource}"
+                     AutoGenerateColumns="False"
+                     IsReadOnly="True"
+                     CanUserSortColumns="True"
+                     CanUserResizeColumns="True"
+                     GridLinesVisibility="Horizontal"
+                     HeadersVisibility="Column"
+                     SelectionMode="Single">
+        <atom:DataGrid.Columns>
+
+          <atom:DataGridTextColumn x:DataType="core:WorkType"
+                                   Header="Название"                                    
+                                   Binding="{Binding Name}"
+                                   Width="3*"/>
+
+          <atom:DataGridTextColumn x:DataType="core:WorkType"
+              Header="Ед. изм."
+                                   Binding="{Binding Unit}"
+                                   Width="120"/>
+
+          <atom:DataGridTextColumn x:DataType="core:WorkType"
+              Header="Базовая цена"
+                                   Binding="{Binding BasePrice, StringFormat='{}{0:0.##}'}"
+                                   Width="160"/>
+
+          <atom:DataGridTemplateColumn Width="220">
+            <atom:DataGridTemplateColumn.CellTemplate>
+              <DataTemplate x:DataType="core:WorkType">
+                <StackPanel Orientation="Horizontal" Spacing="8"
+                            HorizontalAlignment="Left">
+                  <atom:Button Content="Изменить"
+                          Classes="Primary"
+                          Click="OnEdit"
+                          CommandParameter="{Binding}"/>
+                  <!--<Button Content="Архивировать"
+                          Click="OnArchive"
+                          CommandParameter="{Binding}"/>-->
+                </StackPanel>
+              </DataTemplate>
+            </atom:DataGridTemplateColumn.CellTemplate>
+          </atom:DataGridTemplateColumn>
+
+        </atom:DataGrid.Columns>
+      </atom:DataGrid>
+    </StackPanel>
+  </Panel>
 </UserControl>

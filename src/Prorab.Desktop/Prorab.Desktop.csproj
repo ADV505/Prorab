@@ -7,6 +7,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="AtomUI.Desktop.Controls" />
+		<PackageReference Include="AtomUI.Desktop.Controls.DataGrid" />
 		<PackageReference Include="Avalonia.Desktop" />
 		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" />
 		<PackageReference Include="System.Security.Cryptography.Pkcs" />

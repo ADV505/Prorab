@@ -11,11 +11,13 @@ internal static class Program
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .UseAtomUIPlatformDetect()
-            .WithAtomUIDefaultOptions()
+            .WithAtomUIDefaultOptions()            
             .UseAtomUI(builder =>
             {
                 builder.WithInitialTheme(IThemeManager.DEFAULT_THEME_ID);
                 builder.UseDesktopControls();
+                builder.UseDesktopDataGrid(); // optional, но у нас теперь нужен
+
                 builder.UseLanguages(LanguageTags.EnUS, [LanguageTags.EnUS]);
             });
 
