@@ -11,9 +11,13 @@
 
       <!-- Шапка -->
       <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto">
+          <StackPanel Orientation="Horizontal">
         <atom:TextBlock Text="Виды работ" FontSize="24" FontWeight="SemiBold"
                         VerticalAlignment="Center"/>
-        <atom:TextBox Grid.Column="1" Width="280"
+
+        <atom:Tag TagColor="orange" Variant="Filled" Text="Расценки"/>
+          </StackPanel>
+              <atom:TextBox Grid.Column="1" Width="280"
                       PlaceholderText="начни вводить слово"
                       Text="{Binding SearchText}"
                       IsAllowClear="True"/>
