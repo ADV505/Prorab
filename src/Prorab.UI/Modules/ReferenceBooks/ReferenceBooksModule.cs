@@ -1,5 +1,4 @@
-﻿using AtomUI.Icons.AntDesign;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Prorab.UI.Navigation;
 using Prorab.UI.ViewModels;
 
@@ -9,7 +8,7 @@ public class ReferenceBooksModule(IServiceProvider services) : INavigationModule
 {
     public string Id => "reference-books";
     public string Title => "Справочники";
-    public AntDesignIconKind Icon => AntDesignIconKind.DatabaseOutlined;
+    public string Icon => Icons.Database;
     public int Order => 10;
 
     public ViewModelBase CreateViewModel()

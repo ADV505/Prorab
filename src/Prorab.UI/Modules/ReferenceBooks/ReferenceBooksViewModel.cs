@@ -1,13 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using AtomUI.Icons.AntDesign;
 using Prorab.UI.Modules;
 using Prorab.UI.ViewModels;
 
 namespace Prorab.UI.Modules.ReferenceBooks;
 
-public record ReferenceBookItem(string Id, string Title, string Description, AntDesignIconKind Icon);
+public record ReferenceBookItem(string Id, string Title, string Description, string Icon);
 
 public partial class ReferenceBooksViewModel : ViewModelBase
 {

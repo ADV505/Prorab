@@ -1,5 +1,4 @@
-﻿using AtomUI.Icons.AntDesign;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Prorab.UI.Navigation;
 using Prorab.UI.ViewModels;
 
@@ -9,7 +8,7 @@ public class HomeModule(IServiceProvider services) : INavigationModule
 {
     public string Id => "home";
     public string Title => "Главная";
-    public AntDesignIconKind Icon => AntDesignIconKind.HomeOutlined;
+    public string Icon => Icons.Home;
     public int Order => 0;
 
     public ViewModelBase CreateViewModel()

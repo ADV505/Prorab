@@ -1,7 +1,6 @@
-<atom:Window xmlns="https://github.com/avaloniaui"
+<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Prorab.UI.Modules.Common"
-        xmlns:atom="https://atomui.net"
         x:Class="Prorab.UI.Modules.Common.ConfirmWindow"
         x:DataType="vm:ConfirmViewModel"
         Title="Подтверждение" Width="380" SizeToContent="Height"
@@ -9,8 +8,8 @@
   <StackPanel Margin="16" Spacing="12">
     <TextBlock Text="{Binding Message}" TextWrapping="Wrap"/>
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-      <atom:Button Content="Архивировать" Click="OnOk"/>
-      <atom:Button Content="Отмена" IsCancel="True" Click="OnCancel"/>
+      <Button Content="Архивировать" Click="OnOk"/>
+      <Button Content="Отмена" IsCancel="True" Click="OnCancel"/>
     </StackPanel>
   </StackPanel>
-</atom:Window>
+</Window>

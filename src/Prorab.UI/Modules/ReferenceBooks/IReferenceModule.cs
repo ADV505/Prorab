@@ -1,5 +1,4 @@
-﻿using AtomUI.Icons.AntDesign;
-using Prorab.UI.ViewModels;
+﻿using Prorab.UI.ViewModels;
 
 namespace Prorab.UI.Modules;
 
@@ -9,6 +8,7 @@ public interface IReferenceModule
     string Id { get; }
     string Title { get; }
     string Description { get; }
-    AntDesignIconKind Icon { get; }
+    /// <summary>SVG-путь иконки (холст 24×24).</summary>
+    string Icon { get; }
     ViewModelBase CreateViewModel();
 }

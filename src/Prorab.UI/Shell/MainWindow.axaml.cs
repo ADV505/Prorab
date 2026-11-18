@@ -1,87 +1,38 @@
-using AtomUI.Desktop.Controls;
-using AtomUI.Icons.AntDesign;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Window = AtomUI.Desktop.Controls.Window;
+using Avalonia.Media;
 
 namespace Prorab.UI.Shell;
 
 public partial class MainWindow : Window
 {
-    private ShellViewModel? ShellVm => DataContext as ShellViewModel;
+    private static readonly string MenuFoldPath = "M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z";
+    private static readonly string MenuUnfoldPath = "M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z";
 
-    private readonly PathIcon _collapseIcon;
-    private readonly PathIcon _expandIcon;
+    private bool _collapsed;
 
     public MainWindow()
     {
         InitializeComponent();
+        UpdateToggleIcon();
+    }
 
-        _collapseIcon = CreateIcon(AntDesignIconKind.MenuFoldOutlined);
-        _expandIcon = CreateIcon(AntDesignIconKind.MenuUnfoldOutlined);
+    private void HandleToggleSidebarClick(object? sender, RoutedEventArgs e)
+    {
+        _collapsed = !_collapsed;
+        Sidebar.Width = _collapsed ? 52 : 220;
+        NavList.Classes.Set("collapsed", _collapsed);
+        AppTitle.IsVisible = !_collapsed;
+        UpdateToggleIcon();
+    }
 
-        SidebarMenu.NavMenuItemClick += (_, args) =>
+    private void UpdateToggleIcon()
+    {
+        ToggleButton.Content = new PathIcon
         {
-            var id = args.NavMenuItem.ItemKey?.ToString();
-            if (id is null)
-            {
-                return;
-            }
-
-            var vm = ShellVm;
-            if (vm is null)
-            {
-                return;
-            }
-
-            vm.Selected = vm.Modules.FirstOrDefault(m => m.Id == id);
+            Width = 18,
+            Height = 18,
+            Data = Geometry.Parse(_collapsed ? MenuUnfoldPath : MenuFoldPath)
         };
-
-        RebuildMenu();
-        DataContextChanged += (_, _) => RebuildMenu();
-
-        UpdateCollapseButtonPresentation();
-        SidebarMenu.GetPropertyChangedObservable(NavMenu.IsInlineCollapsedProperty)
-                   .Subscribe(_ => UpdateCollapseButtonPresentation());
-    }
-
-    private void RebuildMenu()
-    {
-        var vm = ShellVm;
-        if (vm is null)
-        {
-            return;
-        }
-
-        SidebarMenu.Items.Clear();
-        foreach (var module in vm.Modules)
-        {
-            SidebarMenu.Items.Add(new NavMenuNode
-            {
-                ItemKey = module.Id,
-                Header = module.Title,
-                Icon = CreateIcon(module.Icon),
-            });
-        }
-    }
-
-    private void HandleToggleCollapsedClick(object? sender, RoutedEventArgs e)
-    {
-        SidebarMenu.IsInlineCollapsed = !SidebarMenu.IsInlineCollapsed;
-        UpdateCollapseButtonPresentation();
-    }
-
-    private void UpdateCollapseButtonPresentation()
-    {
-        CollapseButton.Icon = SidebarMenu.IsInlineCollapsed
-            ? _expandIcon
-            : _collapseIcon;
-        //SidebarTitle.IsVisible = !SidebarMenu.IsInlineCollapsed;
-    }
-
-    private static PathIcon CreateIcon(AntDesignIconKind iconKind)
-    {
-        return (PathIcon)new AntDesignIconProvider(iconKind).ProvideValue(null!);
     }
 }

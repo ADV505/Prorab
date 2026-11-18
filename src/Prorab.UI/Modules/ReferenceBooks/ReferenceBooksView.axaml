@@ -1,47 +1,42 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:icons="using:AtomUI.Icons.AntDesign"
              xmlns:vm="using:Prorab.UI.Modules.ReferenceBooks"
-             xmlns:antdicons="https://atomui.net/icons/antdesign"
-             xmlns:atom="https://atomui.net"
              x:Class="Prorab.UI.Modules.ReferenceBooks.ReferenceBooksView"
              x:DataType="vm:ReferenceBooksViewModel">
 
-  <Panel >
-      
+  <Panel>
     <!-- Хаб: плитки -->
     <ScrollViewer IsVisible="{Binding IsHome}">
-      <StackPanel Margin="24,24,24,5" Spacing="12">
-          <!--<atom:Descriptions Header="Справочники" Margin ="18,0,0,0" FontSize="24" FontWeight="SemiBold">
-              <atom:DescriptionItem Content="Объекты, Субподрядчики, Прайс работ" />
-         </atom:Descriptions>-->
-        <TextBlock Margin ="18,0,0,0" Text="Справочники" FontSize="24" FontWeight="SemiBold"/>
-        <TextBlock Margin ="18,0,0,0" Text="Объекты, Субподрядчики, Прайс работ" FontSize="14"/>
-        <ItemsControl ItemsSource="{Binding Books}" >
+      <StackPanel Margin="24" Spacing="12">
+        <TextBlock Margin="18,0,0,0" Text="Справочники" FontSize="24" FontWeight="SemiBold"/>
+        <TextBlock Margin="18,0,0,0" Text="Объекты, Субподрядчики, Прайс работ" FontSize="14" Opacity="0.7"/>
+
+        <ItemsControl ItemsSource="{Binding Books}">
           <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-              <WrapPanel />
+              <WrapPanel/>
             </ItemsPanelTemplate>
           </ItemsControl.ItemsPanel>
           <ItemsControl.ItemTemplate>
             <DataTemplate>
-              <atom:Button Command="{Binding $parent[ItemsControl].DataContext.OpenCommand}"
+              <Button Command="{Binding $parent[ItemsControl].DataContext.OpenCommand}"
                       CommandParameter="{Binding Id}"
-                      HorizontalContentAlignment="Stretch" Padding="-1" Margin="12" >
-               
- <atom:Card IsHoverable="True" MinWidth="300"  HorizontalAlignment="Left">
-        <atom:CardMetaContent Header="{Binding Title}">
-            <atom:CardMetaContent.Avatar>
-                <atom:Avatar Icon="{Binding Icon, Converter={StaticResource KindToIcon}}" Background="CadetBlue"/>
-            </atom:CardMetaContent.Avatar>
-            <StackPanel Orientation="Vertical" Spacing="3">
-                <atom:TextBlock Text="{Binding Description}" />
-               
-            </StackPanel>
-        </atom:CardMetaContent>
-        
-    </atom:Card>
-              </atom:Button>
+                      HorizontalAlignment="Left" Margin="12" Padding="0">
+                <Border MinWidth="300" Padding="16" CornerRadius="8"
+                        Background="White" BorderBrush="#E0E0E0" BorderThickness="1">
+                  <StackPanel Orientation="Horizontal" Spacing="12">
+                    <Border Width="40" Height="40" CornerRadius="20"
+                            Background="#4E7F9A" VerticalAlignment="Top">
+                      <PathIcon Width="20" Height="20" Foreground="White"
+                                Data="{Binding Icon, Converter={StaticResource IconPath}}"/>
+                    </Border>
+                    <StackPanel Spacing="4" VerticalAlignment="Center">
+                      <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="SemiBold"/>
+                      <TextBlock Text="{Binding Description}" Opacity="0.7"/>
+                    </StackPanel>
+                  </StackPanel>
+                </Border>
+              </Button>
             </DataTemplate>
           </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -49,8 +44,8 @@
     </ScrollViewer>
 
     <!-- Открытый справочник -->
-    <DockPanel IsVisible="{Binding !IsHome}" >
-      <atom:Button DockPanel.Dock="Top" Command="{Binding BackCommand}" 
+    <DockPanel IsVisible="{Binding !IsHome}">
+      <Button DockPanel.Dock="Top" Command="{Binding BackCommand}"
               Content="← Все справочники" HorizontalAlignment="Left" Margin="16,24,5,5"/>
       <ContentControl Content="{Binding Current}"/>
     </DockPanel>

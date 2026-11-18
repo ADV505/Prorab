@@ -1,34 +1,34 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="Prorab.UI.App"
+             xmlns:conv="using:Prorab.UI.Converters"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
              xmlns:home="using:Prorab.UI.Modules.Home"
-             xmlns:vm="using:Prorab.UI.Modules.Crews"
              xmlns:crews="using:Prorab.UI.Modules.Crews"
              xmlns:ref="using:Prorab.UI.Modules.ReferenceBooks"
              xmlns:sites="using:Prorab.UI.Modules.Sites"
              xmlns:wt="using:Prorab.UI.Modules.WorkTypes"
-             xmlns:conv="using:Prorab.UI.Converters">
+             x:Class="Prorab.UI.App">
   <Application.DataTemplates>
     <DataTemplate DataType="{x:Type home:HomeViewModel}">
       <home:HomeView/>
     </DataTemplate>
-      <DataTemplate DataType="{x:Type vm:CrewsViewModel}">
-  <crews:CrewsView/>
-</DataTemplate>
-      <DataTemplate DataType="{x:Type ref:ReferenceBooksViewModel}">
-  <ref:ReferenceBooksView/>
-</DataTemplate>
-      <DataTemplate DataType="{x:Type sites:SitesViewModel}">
-  <sites:SitesView/>
-</DataTemplate>
-      <DataTemplate DataType="{x:Type wt:WorkTypesViewModel}">
-  <wt:WorkTypesView/>
-</DataTemplate>
+    <DataTemplate DataType="{x:Type crews:CrewsViewModel}">
+      <crews:CrewsView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type ref:ReferenceBooksViewModel}">
+      <ref:ReferenceBooksView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type sites:SitesViewModel}">
+      <sites:SitesView/>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type wt:WorkTypesViewModel}">
+      <wt:WorkTypesView/>
+    </DataTemplate>
   </Application.DataTemplates>
-   <Application.Resources>
-  <conv:AntDesignIconKindToIconConverter x:Key="KindToIcon"/>
-</Application.Resources>
+  <Application.Resources>
+    <conv:StringToGeometryConverter x:Key="IconPath"/>
+  </Application.Resources>
   <Application.Styles>
-    <FluentTheme/>
+    <actipro:ModernTheme Includes="NativeDataGrid" />
   </Application.Styles>
 </Application>

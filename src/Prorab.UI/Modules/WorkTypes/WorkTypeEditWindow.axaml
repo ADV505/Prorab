@@ -1,6 +1,5 @@
-<atom:Window xmlns="https://github.com/avaloniaui"
+<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:atom="https://atomui.net"
         xmlns:vm="using:Prorab.UI.Modules.WorkTypes"
         x:Class="Prorab.UI.Modules.WorkTypes.WorkTypeEditWindow"
         x:DataType="vm:WorkTypeEditViewModel"
@@ -8,13 +7,13 @@
         Title="Новый вид работ" Width="440" SizeToContent="Height"
         CanResize="False" WindowStartupLocation="CenterOwner">
   <StackPanel Margin="16" Spacing="12">
-    <atom:TextBox PlaceholderText="Название (например, Кладка кирпича)" Text="{Binding Name}"/>
-    <atom:TextBox PlaceholderText="Единица измерения (м², шт., смена)" Text="{Binding Unit}"/>
-    <atom:TextBox PlaceholderText="Базовая цена за единицу, руб." Text="{Binding BasePrice}"/>
+    <TextBox PlaceholderText="Название (например, Кладка кирпича)" Text="{Binding Name}"/>
+    <TextBox PlaceholderText="Единица измерения (м², шт., смена)" Text="{Binding Unit}"/>
+    <TextBox PlaceholderText="Базовая цена за единицу, руб." Text="{Binding BasePrice}"/>
 
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-      <atom:Button Content="Отмена" IsCancel="True" Click="OnCancel"/>
-      <atom:Button Content="Сохранить" IsDefault="True" Click="OnSave"/>
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+      <Button Content="Отмена" IsCancel="True" Click="OnCancel"/>
+      <Button Content="Сохранить" IsDefault="True" Click="OnSave"/>
     </StackPanel>
   </StackPanel>
-</atom:Window>
+</Window>

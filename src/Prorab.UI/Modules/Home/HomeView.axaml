@@ -1,36 +1,56 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Prorab.UI.Modules.Home"
-             xmlns:atom="https://atomui.net"
              x:Class="Prorab.UI.Modules.Home.HomeView"
              x:DataType="vm:HomeViewModel">
 
-  <Panel Background="{atom:SharedTokenResource ColorBgLayout}">
+  <Panel Background="#F5F6F8">
     <StackPanel Margin="24" Spacing="16">
 
       <TextBlock Text="{Binding Greeting}" FontSize="24" FontWeight="SemiBold"/>
 
-      <!-- Карточка «Объекты» -->
-      <Border Width="280" Padding="20" CornerRadius="8"
-              Background="{atom:SharedTokenResource ColorBgContainer}">
-        <StackPanel Spacing="12">
-          <StackPanel Orientation="Horizontal" Spacing="8">
-            <atom:TextBlock Text="Объекты" FontSize="16" FontWeight="SemiBold"/>
-            <atom:Tag TagColor="red" Variant="Filled"
-                      IsVisible="{Binding HasOverdue}"
-                      Text="{Binding OverdueSites, StringFormat='Просрочено: {0}'}"/>
-          </StackPanel>
+      <StackPanel Orientation="Horizontal" Spacing="16">
 
-          <StackPanel Orientation="Horizontal" Spacing="8">
-            <atom:Tag TagColor="green" Variant="Filled"
-                      Text="{Binding ActiveSites, StringFormat='Действующих: {0}'}"/>
-            <atom:Tag TagColor="orange" Variant="Filled"
-                      IsVisible="{Binding HasOverdue}"
-                      Text="Сроки вышли"/>
-          </StackPanel>
-        </StackPanel>
-      </Border>
+        <!-- Карточка «Объекты» -->
+        <Border Width="280" Padding="20" CornerRadius="8" Background="White"
+                BorderBrush="#E0E0E0" BorderThickness="1">
+          <StackPanel Spacing="12">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <TextBlock Text="Объекты" FontSize="16" FontWeight="SemiBold"/>
+              <Border CornerRadius="10" Padding="8,2" Background="#FCE8E6"
+                      IsVisible="{Binding HasOverdue}">
+                <TextBlock FontSize="12" Foreground="#B3261E"
+                           Text="{Binding OverdueSites, StringFormat='Просрочено: {0}'}"/>
+              </Border>
+            </StackPanel>
 
+            <TextBlock Text="{Binding ActiveSites}" FontSize="34" FontWeight="SemiBold"/>
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Border CornerRadius="10" Padding="8,2" Background="#E6F4EA">
+                <TextBlock FontSize="12" Foreground="#137333"
+                           Text="{Binding ActiveSites, StringFormat='Действующих: {0}'}"/>
+              </Border>
+              <Border CornerRadius="10" Padding="8,2" Background="#FEF3E2"
+                      IsVisible="{Binding HasOverdue}">
+                <TextBlock FontSize="12" Foreground="#B26A00" Text="Сроки вышли"/>
+              </Border>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Карточка «Сумма действующих контрактов» -->
+        <Border Width="280" Padding="20" CornerRadius="8" Background="White"
+                BorderBrush="#E0E0E0" BorderThickness="1">
+          <StackPanel Spacing="12">
+            <TextBlock Text="Сумма действующих контрактов" FontSize="16" FontWeight="SemiBold"
+                       TextWrapping="Wrap"/>
+            <TextBlock FontSize="34" FontWeight="SemiBold"
+                       Text="{Binding ActiveAmount, StringFormat='{}{0:N0} руб.'}"/>
+          </StackPanel>
+        </Border>
+
+      </StackPanel>
     </StackPanel>
   </Panel>
 </UserControl>

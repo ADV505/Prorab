@@ -51,7 +51,6 @@ public partial class WorkTypesView : UserControl
         }
     }
 
-
     private async void OnArchive(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not WorkTypesViewModel viewModel) return;

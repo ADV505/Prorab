@@ -2,14 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Prorab.UI.Modules.Crews"
              xmlns:core="using:Prorab.Core.Models"
-             xmlns:atom="https://atomui.net"
              x:Class="Prorab.UI.Modules.Crews.CrewsView"
              x:DataType="vm:CrewsViewModel">
 
   <DockPanel Margin="24,24,24,5">
     <DockPanel DockPanel.Dock="Top" Margin="0,4,0,12">
       <TextBlock Text="Бригады" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-      <atom:Button Content="＋ Добавить" Click="OnAdd" HorizontalAlignment="Right"
+      <Button Content="＋ Добавить" Click="OnAdd" HorizontalAlignment="Right"
               HorizontalContentAlignment="Center" Padding="16,6"/>
     </DockPanel>
 
@@ -21,20 +20,19 @@
           <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="core:Crew">
               <Border Padding="16,12" CornerRadius="8" Margin="0,0,0,8"
-                      Background="{DynamicResource RegionBrush}">
+                      Background="White" BorderBrush="#E0E0E0" BorderThickness="1">
                 <Grid ColumnDefinitions="*,Auto,Auto,Auto">
-  <TextBlock Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center"/>
-  <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="16"
-              VerticalAlignment="Center" Opacity="0.7" Margin="0,0,16,0">
-    <TextBlock Text="{Binding ForemanName}"/>
-    <TextBlock Text="{Binding Phone}"/>
-  </StackPanel>
-  <Button Grid.Column="2" Content="Изменить" Margin="0,0,8,0"
-          Click="OnEdit" CommandParameter="{Binding}"/>
-  <Button Grid.Column="3" Content="Архивировать" Click="OnArchive"
-          CommandParameter="{Binding}"/>
-</Grid>
-
+                  <TextBlock Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                  <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="16"
+                              VerticalAlignment="Center" Opacity="0.7" Margin="0,0,16,0">
+                    <TextBlock Text="{Binding ForemanName}"/>
+                    <TextBlock Text="{Binding Phone}"/>
+                  </StackPanel>
+                  <Button Grid.Column="2" Content="Изменить" Margin="0,0,8,0"
+                          Click="OnEdit" CommandParameter="{Binding}"/>
+                  <Button Grid.Column="3" Content="Архивировать" Click="OnArchive"
+                          CommandParameter="{Binding}"/>
+                </Grid>
               </Border>
             </DataTemplate>
           </ItemsControl.ItemTemplate>

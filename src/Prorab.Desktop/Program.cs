@@ -1,8 +1,4 @@
-﻿using AtomUI;
-using AtomUI.Desktop.Controls;
-using AtomUI.Localization;
-using AtomUI.Theme;
-using Avalonia;
+﻿using Avalonia;
 using Prorab.UI;
 
 internal static class Program
@@ -10,16 +6,7 @@ internal static class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .UseAtomUIPlatformDetect()
-            .WithAtomUIDefaultOptions()            
-            .UseAtomUI(builder =>
-            {
-                builder.WithInitialTheme(IThemeManager.DEFAULT_THEME_ID);
-                builder.UseDesktopControls();
-                builder.UseDesktopDataGrid(); // optional, но у нас теперь нужен
-
-                builder.UseLanguages(LanguageTags.EnUS, [LanguageTags.EnUS]);
-            });
+            .WithInterFont();
 
     [STAThread]
     public static void Main(string[] args)

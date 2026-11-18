@@ -6,8 +6,9 @@
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="AtomUI.Desktop.Controls" />
-		<PackageReference Include="AtomUI.Desktop.Controls.DataGrid" />
+		<PackageReference Include="ActiproSoftware.Controls.Avalonia" />
+		<PackageReference Include="ActiproSoftware.Controls.Avalonia.Themes.DataGrid" />
+		<PackageReference Include="Avalonia.Controls.DataGrid" />
 		<PackageReference Include="Avalonia" />
 		<PackageReference Include="Avalonia.Themes.Fluent" />
 		<PackageReference Include="Avalonia.Fonts.Inter" />
@@ -18,6 +19,7 @@
 		<PackageReference Include="System.Security.Cryptography.Pkcs" />
 		<PackageReference Include="System.Security.Cryptography.Xml" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\Core\Core.csproj" />
 		<ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />

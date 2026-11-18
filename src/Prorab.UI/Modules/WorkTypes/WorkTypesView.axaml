@@ -1,70 +1,65 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:atom="https://atomui.net"
              xmlns:vm="using:Prorab.UI.Modules.WorkTypes"
              xmlns:core="using:Prorab.Core.Models"
              x:Class="Prorab.UI.Modules.WorkTypes.WorkTypesView"
              x:DataType="vm:WorkTypesViewModel">
 
-  <Panel Background="{atom:SharedTokenResource ColorBgLayout}">
+  <Panel Background="#F5F6F8">
     <Grid Margin="24" RowDefinitions="Auto,*" RowSpacing="12">
 
       <!-- Шапка -->
       <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto">
-          <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-  <atom:TextBlock Text="Виды работ" FontSize="24" FontWeight="SemiBold"/>
-  <atom:Tag TagColor="orange" Variant="Filled" Text="Расценки"/>
-</StackPanel>
+        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+          <TextBlock Text="Виды работ" FontSize="24" FontWeight="SemiBold"/>
+          <Border CornerRadius="10" Padding="8,2" Background="#FEF3E2" VerticalAlignment="Center">
+            <TextBlock FontSize="12" Foreground="#B26A00" Text="Расценки"/>
+          </Border>
+        </StackPanel>
 
-              <atom:TextBox Grid.Column="1" Width="280"
-                      PlaceholderText="начни вводить слово"
-                      Text="{Binding SearchText}"
-                      IsAllowClear="True"/>
-        <atom:Button Grid.Column="2" Margin="12,0,0,0"
-                     ButtonType="Primary"
-                     Content="Добавить вид работ"
-                     Click="OnAdd"/>
+        <TextBox Grid.Column="1" Width="280" PlaceholderText="начни вводить слово"
+                 Text="{Binding SearchText}"/>
+        <Button Grid.Column="2" Margin="12,0,0,0" Classes="accent"
+                Content="Добавить вид работ" Click="OnAdd"/>
       </Grid>
 
       <!-- Таблица: забирает всё оставшееся место, скроллит сама -->
-      <atom:DataGrid Grid.Row="1"
-                     ItemsSource="{Binding WorkTypesSource}"
-                     AutoGenerateColumns="False"
-                     IsReadOnly="True"
-                     CanUserSortColumns="True"
-                     CanUserResizeColumns="True"
-                     GridLinesVisibility="Horizontal"
-                     HeadersVisibility="Column"
-                     SelectionMode="Single">
-        <atom:DataGrid.Columns>
+      <DataGrid Grid.Row="1"
+                ItemsSource="{Binding WorkTypes}"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                GridLinesVisibility="Horizontal"
+                HeadersVisibility="Column"
+                SelectionMode="Single">
+        <DataGrid.Columns>
 
-          <atom:DataGridTextColumn x:DataType="core:WorkType"
-                                   Header="Название"
-                                   Binding="{Binding Name}"
-                                   Width="*"/>
+          <DataGridTextColumn x:DataType="core:WorkType"
+                              Header="Название"
+                              Binding="{Binding Name}"
+                              Width="*"/>
 
-          <atom:DataGridTextColumn x:DataType="core:WorkType"
-                                   Header="Ед. изм."
-                                   Binding="{Binding Unit}"
-                                   Width="120"/>
+          <DataGridTextColumn x:DataType="core:WorkType"
+                              Header="Ед. изм."
+                              Binding="{Binding Unit}"
+                              Width="120"/>
 
-          <atom:DataGridTextColumn x:DataType="core:WorkType"
-                                   Header="Базовая цена"
-                                   Binding="{Binding BasePrice, StringFormat='{}{0:N0} руб.'}"
-                                   Width="160"/>
+          <DataGridTextColumn x:DataType="core:WorkType"
+                              Header="Базовая цена"
+                              Binding="{Binding BasePrice, StringFormat='{}{0:N0} руб.'}"
+                              Width="160"/>
 
-          <atom:DataGridTemplateColumn Width="180">
-            <atom:DataGridTemplateColumn.CellTemplate>
+          <DataGridTemplateColumn Width="180">
+            <DataGridTemplateColumn.CellTemplate>
               <DataTemplate x:DataType="core:WorkType">
-                <atom:Button Content="Изменить"
-                             Click="OnEdit"
-                             CommandParameter="{Binding}"/>
+                <Button Content="Изменить" Click="OnEdit"
+                        CommandParameter="{Binding}"
+                        HorizontalAlignment="Left" Margin="4,4,0,4"/>
               </DataTemplate>
-            </atom:DataGridTemplateColumn.CellTemplate>
-          </atom:DataGridTemplateColumn>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
 
-        </atom:DataGrid.Columns>
-      </atom:DataGrid>
+        </DataGrid.Columns>
+      </DataGrid>
     </Grid>
   </Panel>
 </UserControl>

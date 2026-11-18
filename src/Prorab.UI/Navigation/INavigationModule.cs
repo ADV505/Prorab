@@ -1,15 +1,14 @@
-﻿using AtomUI.Icons.AntDesign;
-using Prorab.UI.ViewModels;
+﻿using Prorab.UI.ViewModels;
 
 namespace Prorab.UI.Navigation;
 
 public interface INavigationModule
 {
-    /// <summary>Уникальный идентификатор модуля — ключ пункта меню NavMenu.</summary>
-    string Id {  get; }
+    /// <summary>Уникальный идентификатор модуля — ключ пункта меню.</summary>
+    string Id { get; }
     string Title { get; }
     int Order { get; }
-    /// <summary>Иконка пункта меню.</summary>
-    AntDesignIconKind Icon { get; }
+    /// <summary>SVG-путь иконки (холст 24×24).</summary>
+    string Icon { get; }
     ViewModelBase CreateViewModel();
 }
