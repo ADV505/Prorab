@@ -1,0 +1,73 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:nav="using:Prorab.UI.Navigation"
+             xmlns:shell="using:Prorab.UI.Shell"
+             xmlns:conv="using:Prorab.UI.Converters"
+             x:Class="Prorab.UI.Shell.DrawerView"
+             x:DataType="shell:ShellViewModel">
+
+    <UserControl.Resources>
+    <conv:IconPathConverter x:Key="IconPath"/>
+  </UserControl.Resources>
+  <UserControl.Styles>
+    <Style Selector="ListBox.nav ListBoxItem">
+      <Setter Property="MinHeight" Value="42"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Margin" Value="4,2"/>
+      <Setter Property="Padding" Value="4"/>
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem:selected">
+      <Setter Property="Background" Value="{DynamicResource AccentSoftBrush}"/>
+    </Style>
+    <Style Selector="ListBox.nav ListBoxItem:selected TextBlock.navTitle">
+      <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+    <Style Selector="ListBox.collapsed ListBoxItem">
+      <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="ListBox.collapsed TextBlock.navTitle">
+      <Setter Property="IsVisible" Value="False"/>
+    </Style>
+    <Style Selector="ListBox.collapsed Border.chip">
+      <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="TextBlock.sectionHeader">
+      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}"/>
+      <Setter Property="Margin" Value="14,14,0,4"/>
+    </Style>
+  </UserControl.Styles>
+
+  <Border Background="{DynamicResource SidebarBackgroundBrush}"
+          BorderBrush="{DynamicResource CardBorderBrush}"
+          BorderThickness="0,0,1,0">
+    <Grid RowDefinitions="Auto,*">
+      <TextBlock Grid.Row="0" Classes="sectionHeader" Text="РАЗДЕЛЫ"/>
+      <ListBox x:Name="NavList" Grid.Row="1" Classes="nav"
+               Margin="6,0,6,8" Background="Transparent" BorderThickness="0"
+               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+               ItemsSource="{Binding Modules}"
+               SelectedItem="{Binding Selected, Mode=TwoWay}">
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="nav:INavigationModule">
+            <Panel Height="32">
+              <Border Classes="chip" Width="28" Height="28" CornerRadius="8"
+                      Background="{DynamicResource AccentSoftBrush}"
+                      HorizontalAlignment="Left" VerticalAlignment="Center">
+                <PathIcon Width="16" Height="16"
+                          Foreground="{DynamicResource AccentBrush}"
+                          Data="{Binding Icon, Converter={StaticResource IconPath}}"/>
+              </Border>
+              <TextBlock Classes="navTitle" Text="{Binding Title}"
+                         Margin="40,0,0,0" VerticalAlignment="Center"/>
+            </Panel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Grid>
+  </Border>
+</UserControl>

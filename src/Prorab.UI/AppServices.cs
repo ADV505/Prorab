@@ -24,8 +24,7 @@ public static class AppServices
         .AddSingleton<INavigationModule, HomeModule>()
         // 2. ViewModel модуля — без неё CreateViewModel упадёт
         .AddTransient<HomeViewModel>()
-        // 3. Shell — без неё окно вообще не открылось бы
-        .AddSingleton<ShellViewModel>()
+        
 
         .AddSingleton<INavigationModule, ReferenceBooksModule>()
         .AddSingleton<IReferenceModule, CrewsModule>()

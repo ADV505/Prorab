@@ -1,56 +1,63 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:nav="using:Prorab.UI.Navigation"
              xmlns:vm="using:Prorab.UI.Modules.Home"
              x:Class="Prorab.UI.Modules.Home.HomeView"
              x:DataType="vm:HomeViewModel">
 
-  <Panel Background="#F5F6F8">
-    <StackPanel Margin="24" Spacing="16">
+  <Panel Background="{DynamicResource PageBackgroundBrush}">
+    <ScrollViewer>
+      <StackPanel Margin="32,28" Spacing="20">
 
-      <TextBlock Text="{Binding Greeting}" FontSize="24" FontWeight="SemiBold"/>
+        <TextBlock Classes="h1" Text="{Binding Greeting}"/>
 
-      <StackPanel Orientation="Horizontal" Spacing="16">
+        <StackPanel Orientation="Horizontal" Spacing="16">
 
-        <!-- Карточка «Объекты» -->
-        <Border Width="280" Padding="20" CornerRadius="8" Background="White"
-                BorderBrush="#E0E0E0" BorderThickness="1">
-          <StackPanel Spacing="12">
-            <StackPanel Orientation="Horizontal" Spacing="8">
-              <TextBlock Text="Объекты" FontSize="16" FontWeight="SemiBold"/>
-              <Border CornerRadius="10" Padding="8,2" Background="#FCE8E6"
-                      IsVisible="{Binding HasOverdue}">
-                <TextBlock FontSize="12" Foreground="#B3261E"
-                           Text="{Binding OverdueSites, StringFormat='Просрочено: {0}'}"/>
+          <!-- Объекты -->
+          <Border Classes="card" Width="320" VerticalAlignment="Top">
+            <StackPanel Spacing="10">
+              <Border Width="42" Height="42" CornerRadius="12"
+                      Background="{DynamicResource AccentSoftBrush}"
+                      HorizontalAlignment="Left">
+                <PathIcon Width="22" Height="22"
+                          Foreground="{DynamicResource AccentBrush}"
+                          Data="{x:Static nav:Icons.Home}"/>
               </Border>
+              <TextBlock Classes="h2" Text="Объекты"/>
+              <!--<TextBlock Classes="stat" Text="{Binding ActiveSites}"/>-->
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Border Classes="stat" Background="{DynamicResource SuccessSoftBrush}">
+                  <TextBlock Foreground="{DynamicResource SuccessTextBrush}"
+                             Text="{Binding ActiveSites, StringFormat='Действующих: {0}'}"/>
+                </Border>
+                <Border Classes="stat" Background="{DynamicResource DangerSoftBrush}"
+                        IsVisible="{Binding HasOverdue}">
+                  <TextBlock Foreground="{DynamicResource DangerTextBrush}"
+                             Text="{Binding OverdueSites, StringFormat='Просрочено: {0}'}"/>
+                </Border>
+              </StackPanel>
             </StackPanel>
+          </Border>
 
-            <TextBlock Text="{Binding ActiveSites}" FontSize="34" FontWeight="SemiBold"/>
-
-            <StackPanel Orientation="Horizontal" Spacing="8">
-              <Border CornerRadius="10" Padding="8,2" Background="#E6F4EA">
-                <TextBlock FontSize="12" Foreground="#137333"
-                           Text="{Binding ActiveSites, StringFormat='Действующих: {0}'}"/>
+          <!-- Сумма действующих контрактов -->
+          <Border Classes="card" Width="320" VerticalAlignment="Top">
+            <StackPanel Spacing="10">
+              <Border Width="42" Height="42" CornerRadius="12"
+                      Background="{DynamicResource AccentSoftBrush}"
+                      HorizontalAlignment="Left">
+                <PathIcon Width="22" Height="22"
+                          Foreground="{DynamicResource AccentBrush}"
+                          Data="{x:Static nav:Icons.Database}"/>
               </Border>
-              <Border CornerRadius="10" Padding="8,2" Background="#FEF3E2"
-                      IsVisible="{Binding HasOverdue}">
-                <TextBlock FontSize="12" Foreground="#B26A00" Text="Сроки вышли"/>
-              </Border>
+              <TextBlock Classes="h2" Text="Сумма действующих контрактов"
+                         TextWrapping="Wrap"/>
+              <TextBlock Classes="stat"
+                         Text="{Binding ActiveAmount, StringFormat='{}{0:N0} руб.'}"/>
             </StackPanel>
-          </StackPanel>
-        </Border>
+          </Border>
 
-        <!-- Карточка «Сумма действующих контрактов» -->
-        <Border Width="280" Padding="20" CornerRadius="8" Background="White"
-                BorderBrush="#E0E0E0" BorderThickness="1">
-          <StackPanel Spacing="12">
-            <TextBlock Text="Сумма действующих контрактов" FontSize="16" FontWeight="SemiBold"
-                       TextWrapping="Wrap"/>
-            <TextBlock FontSize="34" FontWeight="SemiBold"
-                       Text="{Binding ActiveAmount, StringFormat='{}{0:N0} руб.'}"/>
-          </StackPanel>
-        </Border>
-
+        </StackPanel>
       </StackPanel>
-    </StackPanel>
+    </ScrollViewer>
   </Panel>
 </UserControl>

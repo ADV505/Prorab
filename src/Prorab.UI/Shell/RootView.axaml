@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:shell="using:Prorab.UI.Shell"
+             xmlns:actipro="http://schemas.actiprosoftware.com/avaloniaui"
+             x:Class="Prorab.UI.Shell.RootView"
+             x:DataType="shell:ShellViewModel">
+
+  <DockPanel>
+
+    <!-- Title Bar -->
+    <actipro:WindowTitleBar DockPanel.Dock="Top" BorderThickness="0,0,0,1" Padding="0">
+      <StackPanel Orientation="Horizontal">
+        <Button Margin="0,0,20,0"
+                Command="{Binding ToggleDrawerOpenCommand}"
+                ContentTemplate="{actipro:GlyphTemplate Menu16}"
+                Theme="{actipro:ControlTheme TitleBarButton}"
+                ToolTip.Tip="Toggle Sidebar" />
+        <StackPanel Margin="10,7,0,7" VerticalAlignment="Center" IsHitTestVisible="False">
+          <TextBlock Text="{Binding ViewSubTitle}" FontSize="12" Opacity="0.85"/>
+          <TextBlock Margin="0,-2,0,0" Text="{Binding ViewTitle}"
+                     FontSize="18" FontWeight="SemiBold"/>
+        </StackPanel>
+      </StackPanel>
+    </actipro:WindowTitleBar>
+
+    <!-- Client Area -->
+    <SplitView x:Name="splitView" DisplayMode="Inline"
+               IsPaneOpen="{Binding IsDrawerOpen}"
+               OpenPaneLength="240" CompactPaneLength="56" PanePlacement="Left">
+      <SplitView.Pane>
+  <shell:DrawerView x:Name="Drawer"/>
+</SplitView.Pane>
+
+
+      <TransitioningContentControl Content="{Binding ViewElement}">
+        <TransitioningContentControl.PageTransition>
+          <PageSlide Orientation="Horizontal" Duration="0:0:0.22"/>
+        </TransitioningContentControl.PageTransition>
+      </TransitioningContentControl>
+    </SplitView>
+
+  </DockPanel>
+</UserControl>

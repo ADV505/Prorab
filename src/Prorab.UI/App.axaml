@@ -25,10 +25,89 @@
       <wt:WorkTypesView/>
     </DataTemplate>
   </Application.DataTemplates>
+
   <Application.Resources>
-    <conv:StringToGeometryConverter x:Key="IconPath"/>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="PageBackgroundBrush" Color="#F6F7F9"/>
+          <SolidColorBrush x:Key="SidebarBackgroundBrush" Color="#FFFFFF"/>
+          <SolidColorBrush x:Key="CardBackgroundBrush" Color="#FFFFFF"/>
+          <SolidColorBrush x:Key="CardBorderBrush" Color="#E4E7EC"/>
+          <SolidColorBrush x:Key="AccentBrush" Color="#2F6FED"/>
+          <SolidColorBrush x:Key="AccentSoftBrush" Color="#EAF1FE"/>
+          <SolidColorBrush x:Key="SuccessSoftBrush" Color="#E6F4EA"/>
+          <SolidColorBrush x:Key="SuccessTextBrush" Color="#137333"/>
+          <SolidColorBrush x:Key="WarningSoftBrush" Color="#FEF3E2"/>
+          <SolidColorBrush x:Key="WarningTextBrush" Color="#B26A00"/>
+          <SolidColorBrush x:Key="DangerSoftBrush" Color="#FCE8E6"/>
+          <SolidColorBrush x:Key="DangerTextBrush" Color="#B3261E"/>
+          <SolidColorBrush x:Key="MutedTextBrush" Color="#667085"/>
+        </ResourceDictionary>
+
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="PageBackgroundBrush" Color="#1C1C1F"/>
+          <SolidColorBrush x:Key="SidebarBackgroundBrush" Color="#242428"/>
+          <SolidColorBrush x:Key="CardBackgroundBrush" Color="#2A2A2E"/>
+          <SolidColorBrush x:Key="CardBorderBrush" Color="#3A3A40"/>
+          <SolidColorBrush x:Key="AccentBrush" Color="#6E9BFF"/>
+          <SolidColorBrush x:Key="AccentSoftBrush" Color="#2B3A55"/>
+          <SolidColorBrush x:Key="SuccessSoftBrush" Color="#1F3B2A"/>
+          <SolidColorBrush x:Key="SuccessTextBrush" Color="#7BD49B"/>
+          <SolidColorBrush x:Key="WarningSoftBrush" Color="#3D2E17"/>
+          <SolidColorBrush x:Key="WarningTextBrush" Color="#E8B464"/>
+          <SolidColorBrush x:Key="DangerSoftBrush" Color="#43242A"/>
+          <SolidColorBrush x:Key="DangerTextBrush" Color="#F2918C"/>
+          <SolidColorBrush x:Key="MutedTextBrush" Color="#9BA1A6"/>
+        </ResourceDictionary>
+
+      </ResourceDictionary.ThemeDictionaries>
+      <conv:StringToGeometryConverter x:Key="IconPath"/>
+    </ResourceDictionary>
   </Application.Resources>
+
   <Application.Styles>
-    <actipro:ModernTheme Includes="NativeDataGrid" />
+    <actipro:ModernTheme Includes="NativeDataGrid"/>
+
+    <!-- Убирает ворчание Rider про неизвестные классы стилей -->
+    <StyleInclude Source="avares://ActiproSoftware.Avalonia.Shared/Themes/StyleClassStubs.axaml"/>
+
+    <!-- Карточка: фон, рамка, тень -->
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="{DynamicResource CardBackgroundBrush}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource CardBorderBrush}"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="BoxShadow" Value="0 1 2 0 #0D000000, 0 4 14 0 #14000000"/>
+      <Setter Property="Padding" Value="20"/>
+    </Style>
+
+    <!-- Пилюля-бейдж -->
+    <Style Selector="Border.pill">
+      <Setter Property="CornerRadius" Value="999"/>
+      <Setter Property="Padding" Value="10,4"/>
+    </Style>
+    <Style Selector="Border.pill TextBlock">
+      <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <!-- Типографика -->
+    <Style Selector="TextBlock.h1">
+      <Setter Property="FontSize" Value="26"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+    <Style Selector="TextBlock.h2">
+      <Setter Property="FontSize" Value="15"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+    <Style Selector="TextBlock.stat">
+      <Setter Property="FontSize" Value="34"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+    <Style Selector="TextBlock.meta">
+      <Setter Property="FontSize" Value="13"/>
+      <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}"/>
+    </Style>
   </Application.Styles>
 </Application>

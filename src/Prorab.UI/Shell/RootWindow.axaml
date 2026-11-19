@@ -1,0 +1,11 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="using:Prorab.UI.Shell"
+        x:Class="Prorab.UI.Shell.RootWindow"
+        Icon="avares://Prorab.UI/Assets/prorab_icon.png"
+        Title="Прораб" Width="1200" Height="800"
+        WindowState="FullScreen"
+        WindowStartupLocation="CenterScreen">
+
+  <shell:RootView/>
+</Window>

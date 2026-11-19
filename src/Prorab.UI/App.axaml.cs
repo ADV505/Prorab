@@ -14,10 +14,7 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = AppServices.Services.GetRequiredService<ShellViewModel>()
-            };
+            desktop.MainWindow = new RootWindow();
         }
 
         base.OnFrameworkInitializationCompleted();
