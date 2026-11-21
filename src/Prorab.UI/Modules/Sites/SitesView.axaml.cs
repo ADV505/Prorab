@@ -68,4 +68,16 @@ public partial class SitesView : UserControl
         if (await confirm.ShowDialog<bool?>(owner) == true)
             await viewModel.ArchiveAsync(site);
     }
+
+    private async void OnRestore(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not SitesViewModel viewModel) return;
+        if ((sender as Button)?.CommandParameter is not Site site) return;
+        if (OwnerWindow is not Window owner) return;
+
+        var confirm = new ConfirmWindow($"Вернуть объект «{site.Name}» из архива?");
+        if (await confirm.ShowDialog<bool?>(owner) == true)
+            await viewModel.RestoreAsync(site);
+    }
+
 }

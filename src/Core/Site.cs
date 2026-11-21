@@ -1,48 +1,72 @@
-﻿namespace Prorab.Core.Models;
+﻿using System;
+using System.Collections.Generic;
 
-public class Site
+namespace Prorab.Core.Models
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string? Address { get; set; }
-
-    /// <summary>Дата начала работ на объекте.</summary>
-    public DateTime? StartDate { get; set; }
-
-    /// <summary>Планируемая дата окончания работ.</summary>
-    public DateTime? EndDate { get; set; }
-
-    /// <summary>Сумма контракта, руб.</summary>
-    public decimal ContractAmount { get; set; }
-
-    public bool IsArchived { get; set; }
-    /// <summary>Номер договора с заказчиком.</summary>
-    public string? ContractNumber { get; set; }
-
-    /// <summary>Статус: «Действующий», пока дата окончания не наступила (или не указана); «Завершён» — когда она прошла.</summary>
-    public string Status
+    public class Site
     {
-        get
-        {
-            if (EndDate is { } end && end.Date < DateTime.Today)
-                return "Завершён";
-            return "Действующий";
-        }
-    }
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string? Address { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public string? ContractNumber { get; set; }
+        public decimal ContractAmount { get; set; }
+        public bool IsArchived { get; set; }
 
-    /// <summary>Строка «сроки · сумма» для отображения в списке.</summary>
-    public string Info
-    {
-        get
-        {
-            var parts = new List<string>();
-            parts.Add(Status);
-            if (StartDate is { } start)
-                parts.Add(start.ToString("dd.MM.yy") + (EndDate is { } end ? $" — {end:dd.MM.yy}" : " — …"));
-            if (ContractAmount > 0)
-                parts.Add($"{ContractAmount:N0} руб.");
-            return string.Join(" · ", parts);
-        }
-    }
+        // Статус завершения
+        public bool IsCompleted => EndDate is { } end && end.Date < DateTime.Today;
 
+        /// <summary>
+        /// Текст для бейджа: дата окончания, "Завершён" или "без срока".
+        /// </summary>
+        public string BadgeText
+        {
+            get
+            {
+                if (IsCompleted)
+                    return "Завершён";
+
+                if (EndDate is { } end)
+                    return $"до {end:dd.MM.yy}";
+
+                return "без срока";
+            }
+        }
+
+        /// <summary>
+        /// Формирует строку "Договор: №... · Сумма" или просто "Договор: №...",
+        /// избегая дублирования слова "Договор", если оно уже есть в ContractNumber.
+        /// </summary>
+        public string Info
+        {
+            get
+            {
+                var parts = new List<string>();
+
+                if (!string.IsNullOrWhiteSpace(ContractNumber))
+                {
+                    var number = ContractNumber.Trim();
+                    // Если пользователь уже ввел "Договор: ..." или "Договор №...", не добавляем префикс
+                    if (number.StartsWith("Договор", StringComparison.OrdinalIgnoreCase))
+                        parts.Add(number);
+                    else
+                        parts.Add($"Договор: {number}");
+                }
+
+                if (ContractAmount > 0)
+                {
+                    parts.Add($"{ContractAmount:N0} руб.");
+                }
+
+                return string.Join(" · ", parts);
+            }
+        }
+
+        /// <summary>
+        /// Флаг, есть ли что отображать в блоке информации (договор/сумма).
+        /// Нужен, чтобы скрывать разделитель и пустую строку.
+        /// </summary>
+        public bool HasInfo => !string.IsNullOrEmpty(Info);
+    }
 }
