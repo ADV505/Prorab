@@ -23,8 +23,8 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ForemanName")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("ForemanWorkerId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsArchived")
                         .HasColumnType("INTEGER");
@@ -33,14 +33,43 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Phone")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ForemanWorkerId");
 
                     b.HasIndex("Name");
 
                     b.ToTable("Crews");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.CrewSite", b =>
+                {
+                    b.Property<int>("CrewId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CrewId", "SiteId");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("CrewSites");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.CrewWorker", b =>
+                {
+                    b.Property<int>("CrewId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WorkerId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CrewId", "WorkerId");
+
+                    b.HasIndex("WorkerId");
+
+                    b.ToTable("CrewWorkers");
                 });
 
             modelBuilder.Entity("Prorab.Core.Models.Site", b =>
@@ -102,6 +131,108 @@ namespace Infrastructure.Migrations
                     b.HasIndex("Name");
 
                     b.ToTable("WorkTypes");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.Worker", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal?>("DayRate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Inn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("PassportIssueDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PassportIssuedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PassportNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PassportSeries")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RegistrationAddress")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Snils")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Workers");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.Crew", b =>
+                {
+                    b.HasOne("Prorab.Core.Models.Worker", "Foreman")
+                        .WithMany()
+                        .HasForeignKey("ForemanWorkerId");
+
+                    b.Navigation("Foreman");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.CrewSite", b =>
+                {
+                    b.HasOne("Prorab.Core.Models.Crew", "Crew")
+                        .WithMany("Sites")
+                        .HasForeignKey("CrewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prorab.Core.Models.Site", "Site")
+                        .WithMany()
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Crew");
+
+                    b.Navigation("Site");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.CrewWorker", b =>
+                {
+                    b.HasOne("Prorab.Core.Models.Crew", "Crew")
+                        .WithMany("Members")
+                        .HasForeignKey("CrewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prorab.Core.Models.Worker", "Worker")
+                        .WithMany()
+                        .HasForeignKey("WorkerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Crew");
+
+                    b.Navigation("Worker");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.Crew", b =>
+                {
+                    b.Navigation("Members");
+
+                    b.Navigation("Sites");
                 });
 #pragma warning restore 612, 618
         }

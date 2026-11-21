@@ -3,15 +3,78 @@
         xmlns:vm="using:Prorab.UI.Modules.Crews"
         x:Class="Prorab.UI.Modules.Crews.CrewEditWindow"
         x:DataType="vm:CrewEditViewModel"
-        Title="Новая бригада" Width="420" SizeToContent="Height"
-        CanResize="False" WindowStartupLocation="CenterOwner">
-  <StackPanel Margin="16" Spacing="12">
-    <TextBox PlaceholderText="Название бригады" Text="{Binding Name}"/>
-    <TextBox PlaceholderText="Прораб" Text="{Binding ForemanName}"/>
-    <TextBox PlaceholderText="Телефон" Text="{Binding Phone}"/>
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-      <Button Content="Отмена" IsCancel="True" Click="OnCancel"/>
-      <Button Content="Сохранить" IsDefault="True" Click="OnSave"/>
+        Width="520" Height="680" WindowStartupLocation="CenterOwner"
+        Title="Диалог">
+
+  <DockPanel Margin="16">
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
+                HorizontalAlignment="Right" Spacing="8" Margin="0,16,0,0">
+      <Button Content="Сохранить" Classes="accent" Click="OnSave" Padding="16,6"/>
+      <Button Content="Отмена" Click="OnCancel" Padding="16,6"/>
     </StackPanel>
-  </StackPanel>
+
+    <ScrollViewer>
+      <StackPanel Spacing="10">
+
+        <TextBlock FontSize="12">
+          <Run Text="Название бригады "/><Run Text="*" FontWeight="Bold" Foreground="#C62828"/>
+        </TextBlock>
+        <TextBox Classes="has-clear-button"
+                 Classes.warning="{Binding NameError}"
+                 Text="{Binding Name}"/>
+
+        <TextBlock Text="Бригадир" FontSize="12"/>
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+          <ComboBox ItemsSource="{Binding ForemanOptions}"
+                    SelectedItem="{Binding SelectedForeman}"
+                    HorizontalAlignment="Stretch">
+            <ComboBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:ForemanOption">
+                <TextBlock Text="{Binding Name}"/>
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+          <Button Grid.Column="1" Content="+ Работник"
+                  Click="OnAddWorker" VerticalAlignment="Center"/>
+        </Grid>
+
+        <TextBlock Text="Состав" FontWeight="SemiBold"/>
+        <TextBlock Text="Состав пуст — нет ни одного активного работника." Opacity="0.6"
+                   IsVisible="{Binding HasNoWorkers}"/>
+        <Border CornerRadius="8" BorderThickness="1"
+                BorderBrush="{DynamicResource CardBorderBrush}"
+                IsVisible="{Binding !HasNoWorkers}">
+          <ScrollViewer MaxHeight="180">
+            <ItemsControl ItemsSource="{Binding WorkerOptions}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:SelectableWorker">
+                  <CheckBox Content="{Binding Display}" IsChecked="{Binding IsSelected}" Margin="8,4"/>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+        </Border>
+
+        <TextBlock Text="Объекты" FontWeight="SemiBold"/>
+        <TextBlock Text="Нет активных объектов." Opacity="0.6"
+                   IsVisible="{Binding HasNoSites}"/>
+        <Border CornerRadius="8" BorderThickness="1"
+                BorderBrush="{DynamicResource CardBorderBrush}"
+                IsVisible="{Binding !HasNoSites}">
+          <ScrollViewer MaxHeight="180">
+            <ItemsControl ItemsSource="{Binding SiteOptions}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:SelectableSite">
+                  <CheckBox Content="{Binding Display}" IsChecked="{Binding IsSelected}" Margin="8,4"/>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+        </Border>
+
+        <TextBlock Text="{Binding ErrorText}" Foreground="#C62828"
+                   IsVisible="{Binding ErrorText, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
 </Window>

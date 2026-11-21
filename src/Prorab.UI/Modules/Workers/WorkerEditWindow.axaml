@@ -1,0 +1,96 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Prorab.UI.Modules.Workers"
+        x:Class="Prorab.UI.Modules.Workers.WorkerEditWindow"
+        x:DataType="vm:WorkerEditViewModel"
+        Width="540" Height="620" WindowStartupLocation="CenterOwner"
+        Title="Диалог">
+
+  <DockPanel Margin="16">
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
+                HorizontalAlignment="Right" Spacing="8" Margin="0,16,0,0">
+      <Button Content="Сохранить" Click="OnSave" Padding="16,6"/>
+      <Button Content="Отмена" Click="OnCancel" Padding="16,6"/>
+    </StackPanel>
+
+    <ScrollViewer>
+      <StackPanel Spacing="10">
+
+        <TextBlock FontSize="12">
+          <Run Text="ФИО или наименование "/><Run Text="*" FontWeight="Bold" Foreground="#C62828"/>
+        </TextBlock>
+        <TextBox Classes="has-clear-button"
+                 Classes.warning="{Binding FullNameError}"
+                 Text="{Binding FullName}"/>
+
+        <TextBlock Text="Статус" FontSize="12"/>
+        <ComboBox SelectedIndex="{Binding StatusIndex}" HorizontalAlignment="Stretch">
+          <ComboBoxItem>Физлицо</ComboBoxItem>
+          <ComboBoxItem>Самозанятый</ComboBoxItem>
+          <ComboBoxItem>ИП</ComboBoxItem>
+          <ComboBoxItem>ООО</ComboBoxItem>
+        </ComboBox>
+
+        <TextBlock Text="Телефон" FontSize="12"/>
+        <TextBox Classes="has-clear-button"
+                 Classes.warning="{Binding PhoneError}"
+                 Text="{Binding Phone}"
+                 TextChanged="OnPhoneChanged"/>
+
+        <TextBlock Text="Ставка за день, руб." FontSize="12"/>
+        <TextBox Classes="has-clear-button" Text="{Binding DayRate}"/>
+
+        <!-- Паспорт: только физлицам и самозанятым -->
+        <StackPanel IsVisible="{Binding IsPassportVisible}" Spacing="10">
+          <TextBlock Text="Паспортные данные" FontWeight="SemiBold"/>
+
+          <Grid ColumnDefinitions="*,8,*">
+            <StackPanel>
+              <TextBlock Text="Серия" FontSize="12"/>
+              <TextBox Classes="has-clear-button" Text="{Binding PassportSeries}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+              <TextBlock Text="Номер" FontSize="12"/>
+              <TextBox Classes="has-clear-button" Text="{Binding PassportNumber}"/>
+            </StackPanel>
+          </Grid>
+
+          <TextBlock Text="Кем выдан" FontSize="12"/>
+          <TextBox Classes="has-clear-button" Text="{Binding PassportIssuedBy}"/>
+
+          <Grid ColumnDefinitions="*,8,*">
+            <StackPanel>
+              <TextBlock Text="Дата выдачи" FontSize="12"/>
+              <DatePicker SelectedDate="{Binding PassportIssueDate}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+              <TextBlock Text="Адрес регистрации" FontSize="12"/>
+              <TextBox Classes="has-clear-button" Text="{Binding RegistrationAddress}"/>
+            </StackPanel>
+          </Grid>
+        </StackPanel>
+
+        <Grid ColumnDefinitions="*,8,*">
+          <StackPanel>
+            <TextBlock Text="СНИЛС" FontSize="12"/>
+            <TextBox Classes="has-clear-button"
+                     Classes.warning="{Binding SnilsError}"
+                     Text="{Binding Snils}"
+                     TextChanged="OnSnilsChanged"/>
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+            <TextBlock Text="ИНН" FontSize="12"/>
+            <TextBox Classes="has-clear-button"
+                     Classes.warning="{Binding InnError}"
+                     Text="{Binding Inn}"
+                     PlaceholderText="{Binding InnPlaceholder}"
+                     TextChanged="OnInnChanged"/>
+          </StackPanel>
+        </Grid>
+
+        <TextBlock Text="{Binding ErrorText}" Foreground="#C62828"
+                   IsVisible="{Binding ErrorText, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</Window>

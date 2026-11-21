@@ -1,99 +1,212 @@
-﻿using System.Collections.ObjectModel;
+﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using Prorab.Core.Models;
 using Prorab.Infrastructure.Data;
+using Prorab.UI.Modules.Workers;
 using Prorab.UI.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace Prorab.UI.Modules.Crews;
 
 public partial class CrewsViewModel : ViewModelBase
 {
-    private readonly IDbContextFactory<AppDbContext> _factory;
+    private readonly IDbContextFactory<AppDbContext> _dbFactory;
 
-    public ObservableCollection<Crew> Crews { get; } = new();
+    private List<Crew> _all = [];
+    private List<Crew> _archivedAll = [];
+    private List<Worker> _workers = [];
+    private List<Site> _sites = [];
 
-    [ObservableProperty] private bool _isLoading;
+    [ObservableProperty] private string _searchText = string.Empty;
 
-    public CrewsViewModel(IDbContextFactory<AppDbContext> factory) => _factory = factory;
+    public ObservableCollection<Crew> Crews { get; } = [];
+    public ObservableCollection<Crew> ArchivedCrews { get; } = [];
 
     public bool HasCrews => Crews.Count > 0;
+    public bool HasArchivedCrews => ArchivedCrews.Count > 0;
+
+    /// <summary>Работники для диалога бригады (активные).</summary>
+    public List<Worker> WorkersForEdit => _workers;
+
+    /// <summary>Объекты для диалога бригады (активные).</summary>
+    public List<Site> SitesForEdit => _sites;
+
+    public CrewsViewModel(IDbContextFactory<AppDbContext> dbFactory)
+    {
+        _dbFactory = dbFactory;
+    }
+
+    partial void OnSearchTextChanged(string value) => ApplyFilter();
 
     public async Task LoadAsync()
     {
-        if (IsLoading) return;
-        IsLoading = true;
-        try
-        {
-            await using var db = await _factory.CreateDbContextAsync();           
-            await DbMigration.EnsureMigratedAsync(_factory);
+        await using var db = await _dbFactory.CreateDbContextAsync();
 
-            var crews = await db.Crews
-                .Where(c => !c.IsArchived)
-                .OrderBy(c => c.Name)
-                .ToListAsync();
+        _all = await db.Crews.AsNoTracking()
+            .Include(c => c.Foreman)
+            .Include(c => c.Members).ThenInclude(m => m.Worker)
+            .Include(c => c.Sites).ThenInclude(cs => cs.Site)
+            .Where(c => !c.IsArchived)
+            .OrderBy(c => c.Name)
+            .ToListAsync();
 
-            Crews.Clear();
-            foreach (var crew in crews)
-                Crews.Add(crew);
-        }
-        finally
-        {
-            IsLoading = false;
-        }
+        _archivedAll = await db.Crews.AsNoTracking()
+            .Include(c => c.Foreman)
+            .Include(c => c.Members).ThenInclude(m => m.Worker)
+            .Include(c => c.Sites).ThenInclude(cs => cs.Site)
+            .Where(c => c.IsArchived)
+            .OrderBy(c => c.Name)
+            .ToListAsync();
+
+        _workers = await db.Workers.AsNoTracking()
+            .Where(w => !w.IsArchived)
+            .OrderBy(w => w.FullName)
+            .ToListAsync();
+
+        _sites = await db.Sites.AsNoTracking()
+            .Where(s => !s.IsArchived)
+            .OrderBy(s => s.Name)
+            .ToListAsync();
+
+        ApplyFilter();
     }
 
-
-    public async Task AddAsync(string name, string? foremanName, string? phone)
+    private void ApplyFilter()
     {
-        name = name.Trim();
-        if (name.Length == 0) return;
+        var query = _all.AsEnumerable();
+        var archived = _archivedAll.AsEnumerable();
 
-        var crew = new Crew { Name = name, ForemanName = foremanName, Phone = phone };
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            var s = SearchText.Trim();
+            query = query.Where(c => c.Name.Contains(s, StringComparison.OrdinalIgnoreCase)
+                || (c.Foreman?.FullName.Contains(s, StringComparison.OrdinalIgnoreCase) ?? false));
+            archived = archived.Where(c => c.Name.Contains(s, StringComparison.OrdinalIgnoreCase));
+        }
 
-        await using var db = await _factory.CreateDbContextAsync();
-        db.Crews.Add(crew);
-        await db.SaveChangesAsync();
+        Crews.Clear();
+        foreach (var c in query) Crews.Add(c);
 
-        Crews.Add(crew);
+        ArchivedCrews.Clear();
+        foreach (var c in archived) ArchivedCrews.Add(c);
+
         OnPropertyChanged(nameof(HasCrews));
+        OnPropertyChanged(nameof(HasArchivedCrews));
     }
 
-    public async Task UpdateAsync(Crew crew, string name, string? foremanName, string? phone)
+    public async Task AddAsync(Window owner)
     {
-        name = name.Trim();
-        if (name.Length == 0) return;
+        var edit = new CrewEditViewModel(WorkersForEdit, SitesForEdit);
+        await ShowEditAsync(edit, owner, null);
+    }
 
-        crew.Name = name;
-        crew.ForemanName = foremanName;
-        crew.Phone = phone;
+    public async Task EditAsync(Crew crew, Window owner)
+    {
+        var edit = new CrewEditViewModel(WorkersForEdit, SitesForEdit, crew);
+        await ShowEditAsync(edit, owner, crew);
+    }
 
-        await using var db = await _factory.CreateDbContextAsync();
-        db.Crews.Update(crew);
+    private async Task ShowEditAsync(CrewEditViewModel edit, Window owner, Crew? existing)
+    {
+        var dlg = new CrewEditWindow(existing is null ? "Новая бригада" : "Изменить бригаду")
+        {
+            DataContext = edit
+        };
+        dlg.CreateWorkerAsync = () => CreateWorkerFromDialogAsync(dlg);
+
+        if (await dlg.ShowDialog<bool?>(owner) != true) return;
+
+        if (existing is null)
+        {
+            var crew = new Crew
+            {
+                Name = edit.Name.Trim(),
+                ForemanWorkerId = edit.SelectedForeman?.Worker?.Id
+            };
+
+            await using var db = await _dbFactory.CreateDbContextAsync();
+            db.Crews.Add(crew);
+            await db.SaveChangesAsync();
+
+            foreach (var workerId in edit.SelectedWorkerIds)
+                db.CrewWorkers.Add(new CrewWorker { CrewId = crew.Id, WorkerId = workerId });
+
+            foreach (var siteId in edit.SelectedSiteIds)
+                db.CrewSites.Add(new CrewSite { CrewId = crew.Id, SiteId = siteId });
+
+            await db.SaveChangesAsync();
+        }
+        else
+        {
+            await using var db = await _dbFactory.CreateDbContextAsync();
+
+            var crew = await db.Crews
+                .Include(c => c.Members)
+                .Include(c => c.Sites)
+                .FirstAsync(c => c.Id == existing.Id);
+
+            crew.Name = edit.Name.Trim();
+            crew.ForemanWorkerId = edit.SelectedForeman?.Worker?.Id;
+
+            crew.Members.Clear();
+            foreach (var workerId in edit.SelectedWorkerIds)
+                crew.Members.Add(new CrewWorker { CrewId = crew.Id, WorkerId = workerId });
+
+            crew.Sites.Clear();
+            foreach (var siteId in edit.SelectedSiteIds)
+                crew.Sites.Add(new CrewSite { CrewId = crew.Id, SiteId = siteId });
+
+            await db.SaveChangesAsync();
+        }
+
+        await LoadAsync();
+    }
+
+    /// <summary>Создаёт работника через диалог и возвращает его; null — отмена.</summary>
+    public async Task<Worker?> CreateWorkerFromDialogAsync(Window owner)
+    {
+        var dlg = new WorkerEditWindow("Новый работник")
+        {
+            DataContext = new WorkerEditViewModel()
+        };
+
+        if (await dlg.ShowDialog<bool?>(owner) != true) return null;
+
+        var edit = (WorkerEditViewModel)dlg.DataContext;
+        var worker = new Worker
+        {
+            FullName = edit.FullName.Trim(),
+            Phone = edit.Phone,
+            // ... остальные поля — как в WorkersViewModel.AddAsync
+        };
+
+        await using var db = await _dbFactory.CreateDbContextAsync();
+        db.Workers.Add(worker);
         await db.SaveChangesAsync();
 
-        // Обновим позицию сортировки, если имя поменялось
-        var index = Crews.IndexOf(crew);
-        if (index >= 0)
-        {
-            Crews.Remove(crew);
-            var newIndex = Crews.IndexOf(Crews.FirstOrDefault(c => string.Compare(c.Name, name, StringComparison.Ordinal) > 0) ?? Crews[^1]) + 1;
-            if (newIndex > Crews.Count) newIndex = Crews.Count;
-            Crews.Insert(newIndex, crew);
-        }
+        // держим кэш и следующий диалог актуальными
+        _workers.Add(worker);
+        _workers.Sort((a, b) => string.Compare(a.FullName, b.FullName, StringComparison.OrdinalIgnoreCase));
+
+        return worker;
     }
 
     public async Task ArchiveAsync(Crew crew)
     {
-        crew.IsArchived = true;
-
-        await using var db = await _factory.CreateDbContextAsync();
-        db.Crews.Update(crew);
+        await using var db = await _dbFactory.CreateDbContextAsync();
+        var entity = await db.Crews.FirstAsync(c => c.Id == crew.Id);
+        entity.IsArchived = true;
         await db.SaveChangesAsync();
-
-        Crews.Remove(crew);
-        OnPropertyChanged(nameof(HasCrews));
+        await LoadAsync();
     }
 
-
+    public async Task RestoreAsync(Crew crew)
+    {
+        await using var db = await _dbFactory.CreateDbContextAsync();
+        var entity = await db.Crews.FirstAsync(c => c.Id == crew.Id);
+        entity.IsArchived = false;
+        await db.SaveChangesAsync();
+        await LoadAsync();
+    }
 }

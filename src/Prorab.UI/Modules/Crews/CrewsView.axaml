@@ -5,38 +5,107 @@
              x:Class="Prorab.UI.Modules.Crews.CrewsView"
              x:DataType="vm:CrewsViewModel">
 
-  <DockPanel Margin="24,24,24,5">
+  <UserControl.Styles>
+    <Style Selector="Border.badge">
+      <Setter Property="CornerRadius" Value="4"/>
+      <Setter Property="Padding" Value="8,2"/>
+      <Setter Property="Background" Value="#2E4CAF50"/>
+      <Setter Property="TextBlock.Foreground" Value="#2E7D32"/>
+    </Style>
+  </UserControl.Styles>
+
+  <DockPanel>
     <DockPanel DockPanel.Dock="Top" Margin="0,4,0,12">
       <TextBlock Text="Бригады" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-      <Button Content="＋ Добавить" Click="OnAdd" HorizontalAlignment="Right"
-              HorizontalContentAlignment="Center" Padding="16,6"/>
+      <Button Content="＋ Добавить" Click="OnAdd" HorizontalAlignment="Right" Padding="16,6"/>
     </DockPanel>
 
     <ScrollViewer>
       <StackPanel Spacing="12">
-        <TextBlock Text="Пока нет бригад — добавьте первую."
+        <TextBox PlaceholderText="Поиск по названию…"
+                 Text="{Binding SearchText, Mode=TwoWay}"/>
+
+        <TextBlock Text="Нет бригад — добавьте первую."
                    IsVisible="{Binding !HasCrews}" Opacity="0.6"/>
+
+        <!-- Активные бригады -->
         <ItemsControl ItemsSource="{Binding Crews}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel Orientation="Horizontal"/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
           <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="core:Crew">
-              <Border Padding="16,12" CornerRadius="8" Margin="0,0,0,8"
-                      Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1">
-                <Grid ColumnDefinitions="*,Auto,Auto,Auto">
-                  <TextBlock Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                  <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="16"
-                              VerticalAlignment="Center" Opacity="0.7" Margin="0,0,16,0">
-                    <TextBlock Text="{Binding ForemanName}"/>
-                    <TextBlock Text="{Binding Phone}"/>
+              <Border Width="330" Margin="0,0,12,12" Padding="16"
+                      CornerRadius="10"
+                      Background="{DynamicResource CardBackgroundBrush}"
+                      BorderBrush="{DynamicResource CardBorderBrush}"
+                      BorderThickness="1">
+                <StackPanel Spacing="6">
+                  <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold"
+                               TextWrapping="Wrap" VerticalAlignment="Center"/>
+                    <Border Grid.Column="1" Classes="badge" Margin="8,0,0,0" VerticalAlignment="Center">
+                      <TextBlock Text="{Binding ForemanName}" FontSize="11"/>
+                    </Border>
+                  </Grid>
+
+                  <TextBlock Text="{Binding SitesSummary}" FontSize="12" Opacity="0.8"
+                             TextWrapping="Wrap"
+                             ToolTip.Tip="{Binding SitesSummary}"/>
+                  <TextBlock Text="{Binding Info}" FontSize="12" Opacity="0.6"
+                             IsVisible="{Binding HasInfo}"/>
+
+                  <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                              Spacing="8" Margin="0,6,0,0">
+                    <Button Content="Изменить" Click="OnEdit" CommandParameter="{Binding}" Padding="12,4"/>
+                    <Button Content="Архивировать" Click="OnArchive" CommandParameter="{Binding}" Padding="12,4"/>
                   </StackPanel>
-                  <Button Grid.Column="2" Content="Изменить" Margin="0,0,8,0"
-                          Click="OnEdit" CommandParameter="{Binding}"/>
-                  <Button Grid.Column="3" Content="Архивировать" Click="OnArchive"
-                          CommandParameter="{Binding}"/>
-                </Grid>
+                </StackPanel>
               </Border>
             </DataTemplate>
           </ItemsControl.ItemTemplate>
         </ItemsControl>
+
+        <!-- Архивные бригады -->
+        <Expander IsVisible="{Binding HasArchivedCrews}" IsExpanded="False">
+          <Expander.Header>
+            <TextBlock FontWeight="SemiBold"
+                       Text="{Binding ArchivedCrews.Count, StringFormat='Архивные бригады ({0})'}"/>
+          </Expander.Header>
+          <ItemsControl ItemsSource="{Binding ArchivedCrews}">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal"/>
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="core:Crew">
+                <Border Width="330" Margin="0,0,12,12" Padding="16" CornerRadius="10" Opacity="0.7"
+                        Background="{DynamicResource CardBackgroundBrush}"
+                        BorderBrush="{DynamicResource CardBorderBrush}"
+                        BorderThickness="1">
+                  <StackPanel Spacing="6">
+                    <Grid ColumnDefinitions="*,Auto">
+                      <TextBlock Text="{Binding Name}" FontSize="15" FontWeight="SemiBold"
+                                 TextWrapping="Wrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                      <Border Grid.Column="1" Classes="badge" Margin="8,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding ForemanName}" FontSize="11"/>
+                      </Border>
+                    </Grid>
+
+                    <TextBlock Text="{Binding Info}" FontSize="12" Opacity="0.7"
+                               IsVisible="{Binding HasInfo}"/>
+
+                    <Button Content="Восстановить" Click="OnRestore" CommandParameter="{Binding}"
+                            HorizontalAlignment="Right" Padding="12,4" Margin="0,6,0,0"/>
+                  </StackPanel>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </Expander>
       </StackPanel>
     </ScrollViewer>
   </DockPanel>
