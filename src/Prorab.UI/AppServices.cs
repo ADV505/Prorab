@@ -40,6 +40,7 @@ public static class AppServices
 
         .AddSingleton<IReferenceModule, SitesModule>()
         .AddTransient<SitesViewModel>()
+        .AddTransient<SiteStructureViewModel>()
 
         .AddSingleton<IReferenceModule, WorkersModule>()
         .AddSingleton<WorkersViewModel>()

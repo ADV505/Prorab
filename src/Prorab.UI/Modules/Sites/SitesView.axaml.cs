@@ -3,6 +3,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Prorab.Core.Models;
 using Prorab.UI.Modules.Common;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Prorab.UI.Modules.Sites;
 
@@ -79,5 +80,17 @@ public partial class SitesView : UserControl
         if (await confirm.ShowDialog<bool?>(owner) == true)
             await viewModel.RestoreAsync(site);
     }
+
+    private async void OnStructure(object? sender, RoutedEventArgs e)
+    {
+        if ((sender as Button)?.CommandParameter is not Site site) return;
+        if (OwnerWindow is not Window owner) return;
+
+        var vm = AppServices.Services.GetRequiredService<SiteStructureViewModel>();
+        var dialog = new SiteStructureWindow { DataContext = vm };
+        await vm.LoadAsync(site.Id, site.Name);
+        await dialog.ShowDialog(owner);
+    }
+
 
 }

@@ -82,6 +82,8 @@
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
                                                 Spacing="8" Margin="0,6,0,0">
                                         <Button Content="Изменить" Click="OnEdit" CommandParameter="{Binding}" Padding="12,4"/>
+                                        <Button Classes="theme-outline" Content="Структура" Click="OnStructure" CommandParameter="{Binding}"/>
+
                                         <Button Content="Архивировать" Click="OnArchive" CommandParameter="{Binding}" Padding="12,4"/>
                                     </StackPanel>
                                 </StackPanel>

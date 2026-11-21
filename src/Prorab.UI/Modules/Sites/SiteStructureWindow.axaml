@@ -1,0 +1,83 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Prorab.UI.Modules.Sites"
+        xmlns:core="using:Prorab.Core.Models"
+        x:Class="Prorab.UI.Modules.Sites.SiteStructureWindow"
+        x:DataType="vm:SiteStructureViewModel"
+        Title="Структура объекта" Width="760" Height="560"
+        CanResize="False" WindowStartupLocation="CenterOwner">
+  <Grid Margin="16" RowDefinitions="Auto,*,Auto" RowSpacing="12"
+        ColumnDefinitions="*,*" ColumnSpacing="16">
+
+    <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+               Text="{Binding SiteTitle}" FontSize="18" FontWeight="SemiBold"/>
+
+    <!-- Левая колонка: этажи + общие -->
+    <Grid Grid.Row="1" Grid.Column="0" RowDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto" RowSpacing="8">
+      <TextBlock Text="Этажи" FontWeight="SemiBold"/>
+      <ListBox Grid.Row="1" ItemsSource="{Binding Floors}"
+               SelectedItem="{Binding SelectedFloor}">
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="core:Floor">
+            <TextBlock Text="{Binding Name}"/>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+      <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8">
+        <TextBox Width="180" PlaceholderText="Новый этаж (1, 2, Подвал…)"
+                 Text="{Binding NewFloorName}"/>
+        <Button Classes="theme-solid accent" Content="+ Этаж" Click="OnAddFloor"/>
+      </StackPanel>
+      <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="8">
+        <Button Classes="theme-outline" Content="Переименовать" Click="OnEditFloor"/>
+        <Button Classes="theme-outline" Content="Удалить" Click="OnDeleteFloor"/>
+      </StackPanel>
+
+      <TextBlock Grid.Row="4" Text="Общие помещения" FontWeight="SemiBold" Margin="0,8,0,0"/>
+      <ListBox Grid.Row="5" Height="120" ItemsSource="{Binding SharedRooms}"
+               SelectedItem="{Binding SelectedSharedRoom}">
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="core:Room">
+            <TextBlock Text="{Binding Name}"/>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+      <StackPanel Grid.Row="6" Orientation="Horizontal" Spacing="8">
+        <TextBox Width="180" PlaceholderText="Новое общее (лестница…)"
+                 Text="{Binding NewSharedRoomName}"/>
+        <Button Classes="theme-solid accent" Content="+" Click="OnAddSharedRoom"/>
+        <Button Classes="theme-outline" Content="Переименовать" Click="OnEditSharedRoom"/>
+        <Button Classes="theme-outline" Content="Удалить" Click="OnDeleteSharedRoom"/>
+      </StackPanel>
+    </Grid>
+
+    <!-- Правая колонка: помещения выбранного этажа -->
+    <Grid Grid.Row="1" Grid.Column="1" RowDefinitions="Auto,*,Auto,Auto" RowSpacing="8">
+      <TextBlock Text="{Binding RoomsHeader}" FontWeight="SemiBold"/>
+      <ListBox Grid.Row="1" ItemsSource="{Binding Rooms}"
+               SelectedItem="{Binding SelectedRoom}">
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="core:Room">
+            <TextBlock Text="{Binding Name}"/>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+      <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8">
+        <TextBox Width="180" PlaceholderText="Новое помещение (5, 15, 17…)"
+                 Text="{Binding NewRoomName}"/>
+        <Button Classes="theme-solid accent" Content="+ Помещение" Click="OnAddRoom"/>
+      </StackPanel>
+      <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="8">
+        <Button Classes="theme-outline" Content="Переименовать" Click="OnEditRoom"/>
+        <Button Classes="theme-outline" Content="Удалить" Click="OnDeleteRoom"/>
+      </StackPanel>
+    </Grid>
+
+    <!-- Низ: статус и закрытие -->
+    <StackPanel Grid.Row="2" Grid.ColumnSpan="2"
+                Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12">
+      <TextBlock Text="{Binding StatusText}" VerticalAlignment="Center" Opacity="0.8"/>
+      <Button Content="Готово" IsDefault="True" Click="OnClose"/>
+    </StackPanel>
+  </Grid>
+</Window>
