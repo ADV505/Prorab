@@ -72,6 +72,57 @@ namespace Infrastructure.Migrations
                     b.ToTable("CrewWorkers");
                 });
 
+            modelBuilder.Entity("Prorab.Core.Models.Floor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("Floors");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.Room", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("FloorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FloorId");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("Rooms");
+                });
+
             modelBuilder.Entity("Prorab.Core.Models.Site", b =>
                 {
                     b.Property<int>("Id")
@@ -105,6 +156,124 @@ namespace Infrastructure.Migrations
                     b.HasIndex("Name");
 
                     b.ToTable("Sites");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.WorkOrder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CrewId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("DiscountPercent")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("SurchargePercent")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CrewId");
+
+                    b.HasIndex("Date");
+
+                    b.HasIndex("Number");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("WorkOrders");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.WorkOrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal?>("DiscountPercent")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal?>("SurchargePercent")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("WorkOrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WorkTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("WorkOrderId");
+
+                    b.HasIndex("WorkTypeId");
+
+                    b.ToTable("WorkOrderItems");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.WorkOrderPayment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Method")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WorkOrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WorkerId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkOrderId");
+
+                    b.HasIndex("WorkerId");
+
+                    b.ToTable("WorkOrderPayments");
                 });
 
             modelBuilder.Entity("Prorab.Core.Models.WorkType", b =>
@@ -228,11 +397,117 @@ namespace Infrastructure.Migrations
                     b.Navigation("Worker");
                 });
 
+            modelBuilder.Entity("Prorab.Core.Models.Floor", b =>
+                {
+                    b.HasOne("Prorab.Core.Models.Site", "Site")
+                        .WithMany()
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Site");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.Room", b =>
+                {
+                    b.HasOne("Prorab.Core.Models.Floor", "Floor")
+                        .WithMany("Rooms")
+                        .HasForeignKey("FloorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Prorab.Core.Models.Site", "Site")
+                        .WithMany()
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Floor");
+
+                    b.Navigation("Site");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.WorkOrder", b =>
+                {
+                    b.HasOne("Prorab.Core.Models.Crew", "Crew")
+                        .WithMany()
+                        .HasForeignKey("CrewId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Prorab.Core.Models.Site", "Site")
+                        .WithMany()
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Crew");
+
+                    b.Navigation("Site");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.WorkOrderItem", b =>
+                {
+                    b.HasOne("Prorab.Core.Models.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Prorab.Core.Models.WorkOrder", "WorkOrder")
+                        .WithMany("Items")
+                        .HasForeignKey("WorkOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prorab.Core.Models.WorkType", "WorkType")
+                        .WithMany()
+                        .HasForeignKey("WorkTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+
+                    b.Navigation("WorkOrder");
+
+                    b.Navigation("WorkType");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.WorkOrderPayment", b =>
+                {
+                    b.HasOne("Prorab.Core.Models.WorkOrder", "WorkOrder")
+                        .WithMany("Payments")
+                        .HasForeignKey("WorkOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prorab.Core.Models.Worker", "Worker")
+                        .WithMany()
+                        .HasForeignKey("WorkerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("WorkOrder");
+
+                    b.Navigation("Worker");
+                });
+
             modelBuilder.Entity("Prorab.Core.Models.Crew", b =>
                 {
                     b.Navigation("Members");
 
                     b.Navigation("Sites");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.Floor", b =>
+                {
+                    b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("Prorab.Core.Models.WorkOrder", b =>
+                {
+                    b.Navigation("Items");
+
+                    b.Navigation("Payments");
                 });
 #pragma warning restore 612, 618
         }

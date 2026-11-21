@@ -16,10 +16,11 @@ public class Crew
     public string ForemanName => Foreman?.FullName ?? "Не назначен";
 
     public string MembersSummary => string.Join(", ",
-        Members.Select(m => m.Worker.FullName));
+    Members.Select(m => m.Worker?.FullName ?? "—"));
 
     public string SitesSummary => string.Join(", ",
-        Sites.Select(s => s.Site.Name));
+        Sites.Select(s => s.Site?.Name ?? "—"));
+
 
     /// <summary>Строка «объекты · состав» для карточки.</summary>
     public string Info
