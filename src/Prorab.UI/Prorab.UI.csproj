@@ -7,6 +7,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="ActiproSoftware.Controls.Avalonia" />
+		<PackageReference Include="Material.Icons.Avalonia" />
 		<PackageReference Include="ActiproSoftware.Controls.Avalonia.Themes.DataGrid" />
 		<PackageReference Include="Avalonia.Controls.DataGrid" />
 		<PackageReference Include="Avalonia" />
@@ -29,5 +30,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Assets\ReferenceBooks\" />
+	  <Folder Include="Converters\" />
 	</ItemGroup>
 </Project>

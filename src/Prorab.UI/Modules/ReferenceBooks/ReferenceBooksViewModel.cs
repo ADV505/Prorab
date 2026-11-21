@@ -1,12 +1,14 @@
-﻿using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Material.Icons;
 using Prorab.UI.Modules;
 using Prorab.UI.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace Prorab.UI.Modules.ReferenceBooks;
 
-public record ReferenceBookItem(string Id, string Title, string Description, string Icon);
+public record ReferenceBookItem(string Id, string Title, string Description, MaterialIconKind Icon);
+
 
 public partial class ReferenceBooksViewModel : ViewModelBase
 {

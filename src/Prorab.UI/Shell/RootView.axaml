@@ -21,6 +21,16 @@
                      FontSize="18" FontWeight="SemiBold"/>
         </StackPanel>
       </StackPanel>
+        <actipro:WindowTitleBar.RightContentTemplate>
+  <DataTemplate>
+    <StackPanel Orientation="Horizontal">
+      <actipro:ToggleThemeButton
+        Theme="{actipro:ControlTheme TitleBarToggleThemeButton}"
+        ToolTip.Tip="Переключить тему" />
+    </StackPanel>
+  </DataTemplate>
+</actipro:WindowTitleBar.RightContentTemplate>
+
     </actipro:WindowTitleBar>
 
     <!-- Client Area -->
@@ -32,7 +42,8 @@
 </SplitView.Pane>
 
 
-      <TransitioningContentControl Content="{Binding ViewElement}">
+      <TransitioningContentControl Content="{Binding ViewElement}"
+                                   Background="{DynamicResource PageBackgroundBrush}">
         <TransitioningContentControl.PageTransition>
           <PageSlide Orientation="Horizontal" Duration="0:0:0.22"/>
         </TransitioningContentControl.PageTransition>

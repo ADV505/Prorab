@@ -2,13 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:nav="using:Prorab.UI.Navigation"
              xmlns:shell="using:Prorab.UI.Shell"
-             xmlns:conv="using:Prorab.UI.Converters"
+             xmlns:material="using:Material.Icons.Avalonia"
              x:Class="Prorab.UI.Shell.DrawerView"
              x:DataType="shell:ShellViewModel">
 
-    <UserControl.Resources>
-    <conv:IconPathConverter x:Key="IconPath"/>
-  </UserControl.Resources>
+   
   <UserControl.Styles>
     <Style Selector="ListBox.nav ListBoxItem">
       <Setter Property="MinHeight" Value="42"/>
@@ -54,18 +52,19 @@
                SelectedItem="{Binding Selected, Mode=TwoWay}">
         <ListBox.ItemTemplate>
           <DataTemplate x:DataType="nav:INavigationModule">
-            <Panel Height="32">
-              <Border Classes="chip" Width="28" Height="28" CornerRadius="8"
-                      Background="{DynamicResource AccentSoftBrush}"
-                      HorizontalAlignment="Left" VerticalAlignment="Center">
-                <PathIcon Width="16" Height="16"
-                          Foreground="{DynamicResource AccentBrush}"
-                          Data="{Binding Icon, Converter={StaticResource IconPath}}"/>
-              </Border>
-              <TextBlock Classes="navTitle" Text="{Binding Title}"
-                         Margin="40,0,0,0" VerticalAlignment="Center"/>
-            </Panel>
-          </DataTemplate>
+  <Panel Height="32">
+    <Border Classes="chip" Width="28" Height="28" CornerRadius="8"
+            Background="{DynamicResource AccentSoftBrush}"
+            HorizontalAlignment="Left" VerticalAlignment="Center">
+      <material:MaterialIcon Width="16" Height="16"
+                             Foreground="{DynamicResource AccentBrush}"
+                             Kind="{Binding Icon}"/>
+    </Border>
+    <TextBlock Classes="navTitle" Text="{Binding Title}"
+               Margin="40,0,0,0" VerticalAlignment="Center"/>
+  </Panel>
+</DataTemplate>
+
         </ListBox.ItemTemplate>
       </ListBox>
     </Grid>

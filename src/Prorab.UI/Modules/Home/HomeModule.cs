@@ -1,14 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Prorab.UI.Navigation;
 using Prorab.UI.ViewModels;
+using Material.Icons;
+using Prorab.UI.Navigation;
 
 namespace Prorab.UI.Modules.Home;
 
 public class HomeModule(IServiceProvider services) : INavigationModule
 {
+
     public string Id => "home";
     public string Title => "Главная";
-    public string Icon => Icons.Home;
+    public MaterialIconKind Icon => MaterialIconKind.Home;
     public int Order => 0;
 
     public ViewModelBase CreateViewModel()

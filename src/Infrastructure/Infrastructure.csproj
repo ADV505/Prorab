@@ -10,6 +10,8 @@
 		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" />
 		<PackageReference Include="System.Security.Cryptography.Pkcs" />
 		<PackageReference Include="System.Security.Cryptography.Xml" />
+		<PackageReference Include="QuestPDF" />
+
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Core\Core.csproj" />

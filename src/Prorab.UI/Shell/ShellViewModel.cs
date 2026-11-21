@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia;
+using Avalonia.Styling;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using Prorab.UI.Navigation;
@@ -49,4 +51,12 @@ public partial class ShellViewModel : ViewModelBase
             _viewModelCache[value.Id] = vm = value.CreateViewModel();
         ViewElement = vm;
     }
+
+    // --- Тема ---
+    [RelayCommand]
+    private void ToggleTheme() =>
+        Application.Current!.RequestedThemeVariant =
+            Application.Current.ActualThemeVariant == ThemeVariant.Dark
+                ? ThemeVariant.Light
+                : ThemeVariant.Dark;
 }

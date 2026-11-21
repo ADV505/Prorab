@@ -4,7 +4,7 @@
         x:Class="Prorab.UI.Shell.RootWindow"
         Icon="avares://Prorab.UI/Assets/prorab_icon.png"
         Title="Прораб" Width="1200" Height="800"
-        WindowState="FullScreen"
+        WindowState="Maximized"
         WindowStartupLocation="CenterScreen">
 
   <shell:RootView/>

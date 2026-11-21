@@ -1,41 +1,53 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Prorab.UI.Modules.ReferenceBooks"
+             xmlns:material="using:Material.Icons.Avalonia"
              x:Class="Prorab.UI.Modules.ReferenceBooks.ReferenceBooksView"
              x:DataType="vm:ReferenceBooksViewModel">
 
-  <Panel>
-    <!-- Хаб: плитки -->
-    <ScrollViewer IsVisible="{Binding IsHome}">
-      <StackPanel Margin="24" Spacing="12">
-        <TextBlock Margin="18,0,0,0" Text="Справочники" FontSize="24" FontWeight="SemiBold"/>
-        <TextBlock Margin="18,0,0,0" Text="Объекты, Субподрядчики, Прайс работ" FontSize="14" Opacity="0.7"/>
+  
 
-        <ItemsControl ItemsSource="{Binding Books}">
+
+
+  <Panel>
+
+    <!-- Хаб: карточки справочников -->
+    <ScrollViewer IsVisible="{Binding IsHome}">
+      <StackPanel Margin="24,20" Spacing="14">
+        <TextBlock Text="Справочники" FontSize="24" FontWeight="SemiBold"/>
+        <TextBlock Text="Объекты, Субподрядчики, Прайс работ"
+                   FontSize="14" Opacity="0.7"/>
+
+        <ItemsControl ItemsSource="{Binding Books}" Margin="0,4,0,0">
           <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
               <WrapPanel/>
             </ItemsPanelTemplate>
           </ItemsControl.ItemsPanel>
           <ItemsControl.ItemTemplate>
-            <DataTemplate>
-              <Button Command="{Binding $parent[ItemsControl].DataContext.OpenCommand}"
+            <DataTemplate x:DataType="vm:ReferenceBookItem">
+              <Button Classes="card"
+                      Width="320" MinHeight="96"
+                      Margin="0,0,12,12"
+                      Cursor="Hand"
+                      Command="{Binding $parent[ItemsControl].((vm:ReferenceBooksViewModel)DataContext).OpenCommand}"
                       CommandParameter="{Binding Id}"
-                      HorizontalAlignment="Left" Margin="12" Padding="0">
-                <Border MinWidth="300" Padding="16" CornerRadius="8"
-                        Background="White" BorderBrush="#E0E0E0" BorderThickness="1">
-                  <StackPanel Orientation="Horizontal" Spacing="12">
-                    <Border Width="40" Height="40" CornerRadius="20"
-                            Background="#4E7F9A" VerticalAlignment="Top">
-                      <PathIcon Width="20" Height="20" Foreground="White"
-                                Data="{Binding Icon, Converter={StaticResource IconPath}}"/>
-                    </Border>
-                    <StackPanel Spacing="4" VerticalAlignment="Center">
-                      <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="SemiBold"/>
-                      <TextBlock Text="{Binding Description}" Opacity="0.7"/>
-                    </StackPanel>
+                      ToolTip.Tip="{Binding Title}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                  <Border Grid.Column="0" Width="40" Height="40" CornerRadius="10"
+                          Background="{DynamicResource AccentBrush}" VerticalAlignment="Top">
+                    <material:MaterialIcon Width="20" Height="20" Foreground="{DynamicResource AccentForegroundBrush}"
+                       Kind="{Binding Icon}"/>
+
+                  </Border>
+                  <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                    <TextBlock Text="{Binding Title}" FontSize="15" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding Description}" FontSize="12"
+                               TextWrapping="Wrap" Opacity="0.7"/>
+                    <TextBlock Text="Открыть →" FontSize="12" Opacity="0.5"
+                               HorizontalAlignment="Right" Margin="0,4,0,0"/>
                   </StackPanel>
-                </Border>
+                </Grid>
               </Button>
             </DataTemplate>
           </ItemsControl.ItemTemplate>
@@ -45,9 +57,11 @@
 
     <!-- Открытый справочник -->
     <DockPanel IsVisible="{Binding !IsHome}">
-      <Button DockPanel.Dock="Top" Command="{Binding BackCommand}"
-              Content="← Все справочники" HorizontalAlignment="Left" Margin="16,24,5,5"/>
-      <ContentControl Content="{Binding Current}"/>
+      <Button Classes="theme-solid accent" DockPanel.Dock="Top" Command="{Binding BackCommand}"
+              Content="← Все справочники"
+              HorizontalAlignment="Left" Margin="16,12,16,0"/>
+      <ContentControl Margin="16" Content="{Binding Current}"/>
     </DockPanel>
+
   </Panel>
 </UserControl>

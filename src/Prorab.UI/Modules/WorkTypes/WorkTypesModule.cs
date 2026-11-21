@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Material.Icons;
+using Microsoft.Extensions.DependencyInjection;
 using Prorab.UI.Modules;
 using Prorab.UI.Navigation;
 using Prorab.UI.ViewModels;
@@ -10,7 +11,7 @@ public class WorkTypesModule(IServiceProvider services) : IReferenceModule
     public string Id => "work-types";
     public string Title => "Виды работ";
     public string Description => "Список работ с единицами измерения";
-    public string Icon => Icons.WorkTypes;
+    public MaterialIconKind Icon => MaterialIconKind.Hammer;
 
     public ViewModelBase CreateViewModel()
     {

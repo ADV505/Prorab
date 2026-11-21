@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Material.Icons;
+using Microsoft.Extensions.DependencyInjection;
 using Prorab.UI.Modules;
 using Prorab.UI.Navigation;
 using Prorab.UI.ViewModels;
@@ -10,7 +11,7 @@ public class CrewsModule(IServiceProvider services) : IReferenceModule
     public string Id => "crews";
     public string Title => "Бригады";
     public string Description => "Состав бригад, договора";
-    public string Icon => Icons.Crews;
+    public MaterialIconKind Icon => MaterialIconKind.AccountGroup;
 
     public ViewModelBase CreateViewModel()
     {

@@ -1,4 +1,5 @@
-﻿using Prorab.UI.ViewModels;
+﻿using Material.Icons;
+using Prorab.UI.ViewModels;
 
 namespace Prorab.UI.Modules;
 
@@ -8,7 +9,7 @@ public interface IReferenceModule
     string Id { get; }
     string Title { get; }
     string Description { get; }
-    /// <summary>SVG-путь иконки (холст 24×24).</summary>
-    string Icon { get; }
+    /// <summary>Иконка Material Design.</summary>
+    MaterialIconKind Icon { get; }
     ViewModelBase CreateViewModel();
 }

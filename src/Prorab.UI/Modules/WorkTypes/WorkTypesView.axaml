@@ -2,25 +2,41 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Prorab.UI.Modules.WorkTypes"
              xmlns:core="using:Prorab.Core.Models"
+             xmlns:material="using:Material.Icons.Avalonia"
+             xmlns:mi="using:Material.Icons"
              x:Class="Prorab.UI.Modules.WorkTypes.WorkTypesView"
              x:DataType="vm:WorkTypesViewModel">
 
-  <Panel Background="#F5F6F8">
+  <Panel>
     <Grid Margin="24" RowDefinitions="Auto,*" RowSpacing="12">
 
       <!-- Шапка -->
       <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto">
         <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
           <TextBlock Text="Виды работ" FontSize="24" FontWeight="SemiBold"/>
-          <Border CornerRadius="10" Padding="8,2" Background="#FEF3E2" VerticalAlignment="Center">
-            <TextBlock FontSize="12" Foreground="#B26A00" Text="Расценки"/>
+          <Border CornerRadius="10" Padding="8,2" Background="{DynamicResource WarningSoftBrush}" VerticalAlignment="Center">
+            <TextBlock FontSize="12" Foreground="{DynamicResource WarningTextBrush}" Text="Прайс-лист"/>
           </Border>
+            <Button Classes="theme-outline" Command="{Binding ExportPdfCommand}">
+  <StackPanel Orientation="Horizontal" Spacing="6">
+    <material:MaterialIcon Width="16" Height="16"
+                           Kind="{x:Static mi:MaterialIconKind.FileDownload}"/>
+    <TextBlock Text="Скачать PDF"/>
+  </StackPanel>
+</Button>
+<Button Classes="theme-outline" Command="{Binding PrintCommand}">
+  <StackPanel Orientation="Horizontal" Spacing="6">
+    <material:MaterialIcon Width="16" Height="16"
+                           Kind="{x:Static mi:MaterialIconKind.Printer}"/>
+    <TextBlock Text="Печать"/>
+  </StackPanel>
+</Button>
         </StackPanel>
 
         <TextBox Grid.Column="1" Width="280" PlaceholderText="начни вводить слово"
                  Text="{Binding SearchText}"/>
-        <Button Grid.Column="2" Margin="12,0,0,0" Classes="accent"
-                Content="Добавить вид работ" Click="OnAdd"/>
+        <Button Classes="theme-solid accent" Grid.Column="2" Margin="12,0,0,0" 
+                Content="+ Добавить вид работ" Click="OnAdd"/>
       </Grid>
 
       <!-- Таблица: забирает всё оставшееся место, скроллит сама -->
@@ -51,7 +67,8 @@
           <DataGridTemplateColumn Width="180">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate x:DataType="core:WorkType">
-                <Button Content="Изменить" Click="OnEdit"
+                <Button Classes="theme-outline accent"
+                        Content="Изменить" Click="OnEdit"
                         CommandParameter="{Binding}"
                         HorizontalAlignment="Left" Margin="4,4,0,4"/>
               </DataTemplate>

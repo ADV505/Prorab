@@ -1,4 +1,5 @@
-﻿using Prorab.UI.ViewModels;
+﻿using Material.Icons;
+using Prorab.UI.ViewModels;
 
 namespace Prorab.UI.Navigation;
 
@@ -8,7 +9,7 @@ public interface INavigationModule
     string Id { get; }
     string Title { get; }
     int Order { get; }
-    /// <summary>SVG-путь иконки (холст 24×24).</summary>
-    string Icon { get; }
+    /// <summary>Иконка Material Design.</summary>
+    MaterialIconKind Icon { get; }
     ViewModelBase CreateViewModel();
 }

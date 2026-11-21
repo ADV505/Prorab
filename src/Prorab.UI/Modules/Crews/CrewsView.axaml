@@ -20,7 +20,7 @@
           <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="core:Crew">
               <Border Padding="16,12" CornerRadius="8" Margin="0,0,0,8"
-                      Background="White" BorderBrush="#E0E0E0" BorderThickness="1">
+                      Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1">
                 <Grid ColumnDefinitions="*,Auto,Auto,Auto">
                   <TextBlock Text="{Binding Name}" FontWeight="SemiBold" VerticalAlignment="Center"/>
                   <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="16"

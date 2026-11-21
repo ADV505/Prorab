@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Material.Icons;
+using Microsoft.Extensions.DependencyInjection;
 using Prorab.UI.Modules;
 using Prorab.UI.Navigation;
 using Prorab.UI.ViewModels;
@@ -10,7 +11,7 @@ public class SitesModule(IServiceProvider services) : IReferenceModule
     public string Id => "sites";
     public string Title => "Объекты";
     public string Description => "Стройплощадки, адреса, заказчики";
-    public string Icon => Icons.Sites;
+    public MaterialIconKind Icon => MaterialIconKind.MapMarker;
 
     public ViewModelBase CreateViewModel()
     {

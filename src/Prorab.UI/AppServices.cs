@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Interfaces;
+using Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Prorab.Infrastructure.Data;
 using Prorab.UI.Modules;
@@ -8,6 +10,7 @@ using Prorab.UI.Modules.ReferenceBooks;
 using Prorab.UI.Modules.Sites;
 using Prorab.UI.Modules.WorkTypes;
 using Prorab.UI.Navigation;
+using Prorab.UI.Services;
 using Prorab.UI.Shell;
 using Prorab.UI.ViewModels;
 
@@ -20,6 +23,10 @@ public static class AppServices
             new AppDbContextFactory(Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "Prorab", "prorab.db")))
+
+        .AddSingleton<IPdfReportService, PdfReportService>()
+        .AddSingleton<IFileSaveService>(_ =>
+        new FileSaveService(() => App.MainWindow))
         // 1. Модуль — без этой строки меню пустое
         .AddSingleton<INavigationModule, HomeModule>()
         // 2. ViewModel модуля — без неё CreateViewModel упадёт
@@ -37,5 +44,7 @@ public static class AppServices
         .AddTransient<WorkTypesViewModel>()
 
         .AddTransient<CrewsViewModel>()
+
+
         .BuildServiceProvider();
 }

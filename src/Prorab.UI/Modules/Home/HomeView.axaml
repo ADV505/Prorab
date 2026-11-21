@@ -1,63 +1,69 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:nav="using:Prorab.UI.Navigation"
              xmlns:vm="using:Prorab.UI.Modules.Home"
+             xmlns:material="using:Material.Icons.Avalonia"
+             xmlns:mi="using:Material.Icons"
              x:Class="Prorab.UI.Modules.Home.HomeView"
              x:DataType="vm:HomeViewModel">
 
-  <Panel Background="{DynamicResource PageBackgroundBrush}">
+  <Panel>
+
     <ScrollViewer>
-      <StackPanel Margin="32,28" Spacing="20">
+  <StackPanel Margin="24,20" Spacing="16">
 
-        <TextBlock Classes="h1" Text="{Binding Greeting}"/>
-
-        <StackPanel Orientation="Horizontal" Spacing="16">
-
-          <!-- Объекты -->
-          <Border Classes="card" Width="320" VerticalAlignment="Top">
-            <StackPanel Spacing="10">
-              <Border Width="42" Height="42" CornerRadius="12"
-                      Background="{DynamicResource AccentSoftBrush}"
-                      HorizontalAlignment="Left">
-                <PathIcon Width="22" Height="22"
-                          Foreground="{DynamicResource AccentBrush}"
-                          Data="{x:Static nav:Icons.Home}"/>
-              </Border>
-              <TextBlock Classes="h2" Text="Объекты"/>
-              <!--<TextBlock Classes="stat" Text="{Binding ActiveSites}"/>-->
-              <StackPanel Orientation="Horizontal" Spacing="8">
-                <Border Classes="stat" Background="{DynamicResource SuccessSoftBrush}">
-                  <TextBlock Foreground="{DynamicResource SuccessTextBrush}"
-                             Text="{Binding ActiveSites, StringFormat='Действующих: {0}'}"/>
-                </Border>
-                <Border Classes="stat" Background="{DynamicResource DangerSoftBrush}"
-                        IsVisible="{Binding HasOverdue}">
-                  <TextBlock Foreground="{DynamicResource DangerTextBrush}"
-                             Text="{Binding OverdueSites, StringFormat='Просрочено: {0}'}"/>
-                </Border>
-              </StackPanel>
-            </StackPanel>
-          </Border>
-
-          <!-- Сумма действующих контрактов -->
-          <Border Classes="card" Width="320" VerticalAlignment="Top">
-            <StackPanel Spacing="10">
-              <Border Width="42" Height="42" CornerRadius="12"
-                      Background="{DynamicResource AccentSoftBrush}"
-                      HorizontalAlignment="Left">
-                <PathIcon Width="22" Height="22"
-                          Foreground="{DynamicResource AccentBrush}"
-                          Data="{x:Static nav:Icons.Database}"/>
-              </Border>
-              <TextBlock Classes="h2" Text="Сумма действующих контрактов"
-                         TextWrapping="Wrap"/>
-              <TextBlock Classes="stat"
-                         Text="{Binding ActiveAmount, StringFormat='{}{0:N0} руб.'}"/>
-            </StackPanel>
-          </Border>
-
-        </StackPanel>
+    <!-- Баннер -->
+    <Border Height="120" CornerRadius="12">
+      <Border.Background>
+        <LinearGradientBrush StartPoint="0%,50%" EndPoint="100%,50%">
+          <GradientStop Offset="0" Color="#2E7CD6"/>
+          <GradientStop Offset="1" Color="#1B5FA8"/>
+        </LinearGradientBrush>
+      </Border.Background>
+      <StackPanel VerticalAlignment="Center" Spacing="4">
+        <TextBlock Text="Прораб" FontSize="26" FontWeight="Bold"
+                   Foreground="White" HorizontalAlignment="Center"/>
+        <TextBlock Text="Стройучёт под контролем" FontSize="14"
+                   Foreground="#DDEAF2" HorizontalAlignment="Center"/>
       </StackPanel>
-    </ScrollViewer>
+    </Border>
+
+    <!-- Карточки статистики -->
+    <WrapPanel>
+      <Border Classes="card" Width="320" MinHeight="140"
+              Margin="0,0,16,0">
+        <StackPanel Spacing="10" VerticalAlignment="Top">
+          <Border Width="40" Height="40" CornerRadius="10"
+                  Background="{DynamicResource AccentSoftBrush}"
+                  HorizontalAlignment="Left">
+            <material:MaterialIcon Width="22" Height="22"
+                                   Foreground="{DynamicResource AccentBrush}"
+                                   Kind="{x:Static mi:MaterialIconKind.MapMarker}"/>
+          </Border>
+          <TextBlock Text="Объекты" FontWeight="SemiBold"/>
+          <TextBlock Text="Действующих: 3" FontSize="13"
+                     Foreground="{DynamicResource SuccessTextBrush}"/>
+        </StackPanel>
+      </Border>
+
+      <Border Classes="card" Width="320" MinHeight="140"
+              Margin="0,0,16,0">
+        <StackPanel Spacing="10" VerticalAlignment="Top">
+          <Border Width="40" Height="40" CornerRadius="10"
+                  Background="{DynamicResource AccentSoftBrush}"
+                  HorizontalAlignment="Left">
+            <material:MaterialIcon Width="22" Height="22"
+                                   Foreground="{DynamicResource AccentBrush}"
+                                   Kind="{x:Static mi:MaterialIconKind.Database}"/>
+          </Border>
+          <TextBlock Text="Сумма действующих контрактов" FontWeight="SemiBold"
+                     TextWrapping="Wrap"/>
+          <TextBlock Text="19 000 000 руб." FontSize="22" FontWeight="Bold"/>
+        </StackPanel>
+      </Border>
+    </WrapPanel>
+
+  </StackPanel>
+</ScrollViewer>
+
   </Panel>
 </UserControl>
