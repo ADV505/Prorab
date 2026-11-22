@@ -83,6 +83,7 @@ public partial class WorkOrderPaymentsViewModel : ViewModelBase
         if (value?.Value == PaymentType.Salary)
             SelectedMethod = Methods.FirstOrDefault(m => m.Value == PaymentMethod.BankTransfer)
                              ?? SelectedMethod;
+
     }
 
     /// <summary>Список на выплату зависит от типа: аванс/полный расчёт — бригадир,
@@ -101,7 +102,7 @@ public partial class WorkOrderPaymentsViewModel : ViewModelBase
             source = _crew?.Members
                 .Select(m => m.Worker)
                 .OfType<Worker>()
-                .Where(w => !w.IsArchived && w.Status == WorkerStatus.Individual)
+                .Where(w => w.IsHired)
                 ?? [];
         }
 
@@ -179,7 +180,7 @@ public partial class WorkOrderPaymentsViewModel : ViewModelBase
             }
             if (SelectedWorker is null || !Workers.Contains(SelectedWorker))
             {
-                StatusText = "Выбранный работник не входит в список для этого типа выплаты.";
+                StatusText = "В бригаде нет работников с оформленным договором подряда.";
                 return;
             }
             if (!decimal.TryParse(AmountText, out var amount) || amount <= 0)

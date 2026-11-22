@@ -30,6 +30,13 @@ public class Worker
     public string? Inn { get; set; }        // обязателен самозанятым и ИП
     public string? Phone { get; set; }
 
+    // ---- Договор подряда (оформление физлица) ----
+    /// <summary>Номер договора подряда. Заполняется кнопкой «Сделать договор».</summary>
+    public string? ContractNumber { get; set; }
+    /// <summary>Дата договора подряда. Не null — значит официально устроен.</summary>
+    public DateTime? ContractDate { get; set; }
+
+
     /// <summary>Дневная ставка — у каждого своя, для оплаты по дням.</summary>
     public decimal? DayRate { get; set; }
 
@@ -43,6 +50,42 @@ public class Worker
         WorkerStatus.Company => "ООО",
         _ => string.Empty,
     };
+
+    /// <summary>Физлицо официально устроено: есть договор подряда.</summary>
+    public bool IsHired =>
+        Status == WorkerStatus.Individual && ContractDate is not null;
+
+    /// <summary>Подпись статуса оформления для таблицы и списков.</summary>
+    public string HireStatusName => Status switch
+    {
+        WorkerStatus.Individual when ContractDate is { } d =>
+            $"Устроен · договор №{ContractNumber} от {d:dd.MM.yyyy}",
+        WorkerStatus.Individual => "Не оформлен",
+        _ => "", // самозанятые, ИП, ООО — не физлица по договору, отметка не нужна
+    };
+
+    // ---- Отображение для таблицы работника ----
+    /// <summary>Кнопке «Сделать договор» нужен только неоформленный физлицо.</summary>
+    public bool CanMakeContract =>
+        Status == WorkerStatus.Individual && ContractDate is null;
+
+    public string ContractText => HireStatusName.Length > 0 ? HireStatusName : "—";
+    public string PhoneText => string.IsNullOrWhiteSpace(Phone) ? "—" : Phone!;
+    public string RateText => DayRate is { } r && r > 0 ? r.ToString("0.##") : "—";
+    public string SnilsText => string.IsNullOrWhiteSpace(Snils) ? "—" : Snils!;
+    public string InnText => string.IsNullOrWhiteSpace(Inn) ? "—" : Inn!;
+
+    public string PassportText
+    {
+        get
+        {
+            var parts = new List<string>();
+            if (!string.IsNullOrWhiteSpace(PassportSeries)) parts.Add(PassportSeries!);
+            if (!string.IsNullOrWhiteSpace(PassportNumber)) parts.Add(PassportNumber!);
+            return NeedsPassport && parts.Count > 0 ? string.Join(' ', parts) : "—";
+        }
+    }
+
 
     /// <summary>Паспорт нужен физлицам и самозанятым.</summary>
     public bool NeedsPassport =>

@@ -32,9 +32,4 @@
 	  <Folder Include="Assets\ReferenceBooks\" />
 	  <Folder Include="Converters\" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Compile Update="Modules\Workers\WorkersView.axaml.cs">
-	    <DependentUpon>WorkersView.axaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
 </Project>

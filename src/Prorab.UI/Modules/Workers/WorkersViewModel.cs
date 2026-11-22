@@ -17,6 +17,9 @@ public partial class WorkersViewModel : ViewModelBase
     public ObservableCollection<Worker> Workers { get; } = [];
     public ObservableCollection<Worker> ArchivedWorkers { get; } = [];
 
+    [ObservableProperty] private string _statusText = "";
+
+
     [ObservableProperty] private bool _isLoading;
 
     [ObservableProperty]
@@ -84,6 +87,32 @@ public partial class WorkersViewModel : ViewModelBase
         SortAll();
         ApplyFilter();
     }
+
+    /// <summary>Оформить договор подряда: номер генерируется автоматически, дата — сегодня.</summary>
+    public async Task MakeContractAsync(Worker worker)
+    {
+        StatusText = "";
+        if (worker.Status != WorkerStatus.Individual || worker.ContractDate is not null) return;
+
+        try
+        {
+            await using var db = await _factory.CreateDbContextAsync();
+            worker.ContractNumber = $"ДП-{DateTime.Now.Year}-{worker.Id:D4}";
+            worker.ContractDate = DateTime.Today;
+            db.Workers.Update(worker);
+            await db.SaveChangesAsync();
+
+            ApplyFilter();
+        }
+        catch (Exception ex)
+        {
+            StatusText = "Не удалось оформить договор: " + ex.Message;
+        }
+    }
+
+
+    /// <summary>Оформить договор подряда: номер генерируется автоматически, дата — сегодня.</summary>
+    
 
     public async Task ArchiveAsync(Worker worker)
     {

@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Prorab.Core.Models;
@@ -29,8 +30,19 @@ public partial class WorkersView : UserControl
 
     private async void OnEdit(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not WorkersViewModel viewModel) return;
         if ((sender as Button)?.CommandParameter is not Worker worker) return;
+        await OpenEditorAsync(worker);
+    }
+
+    private async void OnRowDoubleTapped(object? sender, TappedEventArgs e)
+    {
+        if ((sender as DataGrid)?.SelectedItem is not Worker worker) return;
+        await OpenEditorAsync(worker);
+    }
+
+    private async Task OpenEditorAsync(Worker worker)
+    {
+        if (DataContext is not WorkersViewModel viewModel) return;
         if (OwnerWindow is not Window owner) return;
 
         var edit = new WorkerEditViewModel
@@ -67,6 +79,14 @@ public partial class WorkersView : UserControl
 
             await viewModel.UpdateAsync(worker);
         }
+    }
+
+    private async void OnMakeContract(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not WorkersViewModel viewModel) return;
+        if ((sender as Button)?.CommandParameter is not Worker worker) return;
+
+        await viewModel.MakeContractAsync(worker);
     }
 
     private async void OnArchive(object? sender, RoutedEventArgs e)

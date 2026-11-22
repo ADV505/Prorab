@@ -5,105 +5,95 @@
              x:Class="Prorab.UI.Modules.Workers.WorkersView"
              x:DataType="vm:WorkersViewModel">
 
-  <UserControl.Styles>
-    <Style Selector="Border.badge">
-      <Setter Property="CornerRadius" Value="4"/>
-      <Setter Property="Padding" Value="8,2"/>
-      <Setter Property="Background" Value="#2E4CAF50"/>
-      <Setter Property="TextBlock.Foreground" Value="#2E7D32"/>
-    </Style>
-  </UserControl.Styles>
-
   <DockPanel>
-    <DockPanel DockPanel.Dock="Top" Margin="0,4,0,12">
-      <TextBlock Text="Работники" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
-      <Button Content="＋ Добавить" Click="OnAdd" HorizontalAlignment="Right" Padding="16,6"/>
-    </DockPanel>
+    <StackPanel DockPanel.Dock="Top" Margin="0,4,0,12" Spacing="8">
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBlock Text="Работники" FontSize="24" FontWeight="SemiBold" VerticalAlignment="Center"/>
+        <Button Grid.Column="1" Content="＋ Добавить" Click="OnAdd" HorizontalAlignment="Right" Padding="16,6"/>
+      </Grid>
+      <TextBox PlaceholderText="Поиск по ФИО или телефону…" Text="{Binding SearchText, Mode=TwoWay}"/>
+    </StackPanel>
 
-    <ScrollViewer>
-      <StackPanel Spacing="12">
-        <TextBox PlaceholderText="Поиск по ФИО или телефону…"
-                 Text="{Binding SearchText, Mode=TwoWay}"/>
+    <Grid RowDefinitions="*,Auto,Auto" RowSpacing="8">
 
-        <TextBlock Text="Нет работников — добавьте первого."
-                   IsVisible="{Binding !HasWorkers}" Opacity="0.6"/>
+      <!-- Активные работники -->
+            <DataGrid ItemsSource="{Binding Workers}"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                CanUserReorderColumns="False"
+                CanUserResizeColumns="True"
+                CanUserSortColumns="True"
+                GridLinesVisibility="Horizontal"
+                HeadersVisibility="Column"
+                SelectionMode="Single"
+                FrozenColumnCount="1"
+                x:CompileBindings="False"
+                DoubleTapped="OnRowDoubleTapped">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="240" FontWeight="SemiBold"/>
 
-        <!-- Активные работники -->
-        <ItemsControl ItemsSource="{Binding Workers}">
-          <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-              <WrapPanel Orientation="Horizontal"/>
-            </ItemsPanelTemplate>
-          </ItemsControl.ItemsPanel>
-          <ItemsControl.ItemTemplate>
-            <DataTemplate x:DataType="core:Worker">
-              <Border Width="330" Margin="0,0,12,12" Padding="16"
-                      CornerRadius="10"
-                      Background="{DynamicResource CardBackgroundBrush}"
-                      BorderBrush="{DynamicResource CardBorderBrush}"
-                      BorderThickness="1">
-                <StackPanel Spacing="6">
-                  <Grid ColumnDefinitions="*,Auto">
-                    <TextBlock Text="{Binding FullName}" FontSize="16" FontWeight="SemiBold"
-                               TextWrapping="Wrap" VerticalAlignment="Center"/>
-                    <Border Grid.Column="1" Classes="badge" Margin="8,0,0,0" VerticalAlignment="Center">
-                      <TextBlock Text="{Binding StatusName}" FontSize="11"/>
-                    </Border>
-                  </Grid>
-
-                  <TextBlock Text="{Binding Info}" FontSize="12" Opacity="0.8"
-                             IsVisible="{Binding HasInfo}"/>
-
-                  <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
-                              Spacing="8" Margin="0,6,0,0">
-                    <Button Content="Изменить" Click="OnEdit" CommandParameter="{Binding}" Padding="12,4"/>
-                    <Button Content="Архивировать" Click="OnArchive" CommandParameter="{Binding}" Padding="12,4"/>
-                  </StackPanel>
-                </StackPanel>
-              </Border>
-            </DataTemplate>
-          </ItemsControl.ItemTemplate>
-        </ItemsControl>
-
-        <!-- Архивные работники -->
-        <Expander IsVisible="{Binding HasArchivedWorkers}" IsExpanded="False">
-          <Expander.Header>
-            <TextBlock FontWeight="SemiBold"
-                       Text="{Binding ArchivedWorkers.Count, StringFormat='Архивные работники ({0})'}"/>
-          </Expander.Header>
-          <ItemsControl ItemsSource="{Binding ArchivedWorkers}">
-            <ItemsControl.ItemsPanel>
-              <ItemsPanelTemplate>
-                <WrapPanel Orientation="Horizontal"/>
-              </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
+          <DataGridTextColumn Header="Статус" Binding="{Binding StatusName}" Width="120"/>
+          <DataGridTextColumn Header="Оформление" Binding="{Binding ContractText}" Width="250"/>
+          <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneText}" Width="140"/>
+          <DataGridTextColumn Header="Ставка" Binding="{Binding RateText}" Width="90"/>
+          <DataGridTextColumn Header="СНИЛС" Binding="{Binding SnilsText}" Width="130"/>
+          <DataGridTextColumn Header="ИНН" Binding="{Binding InnText}" Width="130"/>
+          <DataGridTextColumn Header="Паспорт" Binding="{Binding PassportText}" Width="150"/>
+          <DataGridTemplateColumn Header="Действия" Width="320">
+            <DataGridTemplateColumn.CellTemplate>
               <DataTemplate x:DataType="core:Worker">
-                <Border Width="330" Margin="0,0,12,12" Padding="16" CornerRadius="10" Opacity="0.7"
-                        Background="{DynamicResource CardBackgroundBrush}"
-                        BorderBrush="{DynamicResource CardBorderBrush}"
-                        BorderThickness="1">
-                  <StackPanel Spacing="6">
-                    <Grid ColumnDefinitions="*,Auto">
-                      <TextBlock Text="{Binding FullName}" FontSize="15" FontWeight="SemiBold"
-                                 TextWrapping="Wrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
-                      <Border Grid.Column="1" Classes="badge" Margin="8,0,0,0" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding StatusName}" FontSize="11"/>
-                      </Border>
-                    </Grid>
-
-                    <TextBlock Text="{Binding Info}" FontSize="12" Opacity="0.7"
-                               IsVisible="{Binding HasInfo}"/>
-
-                    <Button Content="Восстановить" Click="OnRestore" CommandParameter="{Binding}"
-                            HorizontalAlignment="Right" Padding="12,4" Margin="0,6,0,0"/>
-                  </StackPanel>
-                </Border>
+                <StackPanel Orientation="Horizontal" Spacing="6" Margin="4,2"
+                            HorizontalAlignment="Left">
+                  <Button Content="Изменить" Click="OnEdit" CommandParameter="{Binding}" Padding="10,4"/>
+                  <Button Content="Сделать договор" Click="OnMakeContract" CommandParameter="{Binding}"
+                          Padding="10,4" IsVisible="{Binding CanMakeContract}"/>
+                  <Button Content="Архивировать" Click="OnArchive" CommandParameter="{Binding}" Padding="10,4"/>
+                </StackPanel>
               </DataTemplate>
-            </ItemsControl.ItemTemplate>
-          </ItemsControl>
-        </Expander>
-      </StackPanel>
-    </ScrollViewer>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+
+      <TextBlock Grid.Row="0" Text="Нет работников — добавьте первого."
+                 IsVisible="{Binding !HasWorkers}" Opacity="0.6"
+                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+      <TextBlock Grid.Row="1" Text="{Binding StatusText}" Opacity="0.9"/>
+
+      <!-- Архивные -->
+      <Expander Grid.Row="2" IsVisible="{Binding HasArchivedWorkers}" IsExpanded="False">
+        <Expander.Header>
+          <TextBlock FontWeight="SemiBold"
+                     Text="{Binding ArchivedWorkers.Count, StringFormat='Архивные работники ({0})'}"/>
+        </Expander.Header>
+                <DataGrid ItemsSource="{Binding ArchivedWorkers}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserReorderColumns="False"
+                  GridLinesVisibility="Horizontal"
+                  HeadersVisibility="Column"
+                  SelectionMode="Single"
+                  FrozenColumnCount="1"
+                  x:CompileBindings="False">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="240" FontWeight="SemiBold"/>
+
+            <DataGridTextColumn Header="Статус" Binding="{Binding StatusName}" Width="120"/>
+            <DataGridTextColumn Header="Телефон" Binding="{Binding PhoneText}" Width="150"/>
+            <DataGridTextColumn Header="Инфо" Binding="{Binding Info}" Width="1*"/>
+            <DataGridTemplateColumn Header="Действия" Width="140">
+              <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate x:DataType="core:Worker">
+                  <Button Content="Восстановить" Click="OnRestore" CommandParameter="{Binding}"
+                          HorizontalAlignment="Left" Margin="4,2" Padding="12,4"/>
+                </DataTemplate>
+              </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+          </DataGrid.Columns>
+        </DataGrid>
+      </Expander>
+
+    </Grid>
   </DockPanel>
 </UserControl>

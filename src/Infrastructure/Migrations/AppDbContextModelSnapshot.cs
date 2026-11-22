@@ -315,6 +315,12 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime?>("ContractDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ContractNumber")
+                        .HasColumnType("TEXT");
+
                     b.Property<decimal?>("DayRate")
                         .HasColumnType("TEXT");
 
