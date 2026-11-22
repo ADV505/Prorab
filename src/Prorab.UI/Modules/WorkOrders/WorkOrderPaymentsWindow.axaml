@@ -1,0 +1,70 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Prorab.UI.Modules.WorkOrders"
+        xmlns:core="using:Prorab.Core.Models"
+        x:Class="Prorab.UI.Modules.WorkOrders.WorkOrderPaymentsWindow"
+        x:DataType="vm:WorkOrderPaymentsViewModel"
+        Title="Выплаты" Width="680" Height="560"
+        WindowStartupLocation="CenterOwner">
+  <Grid Margin="16" RowDefinitions="Auto,Auto,*,Auto,Auto,Auto" RowSpacing="10">
+    <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="SemiBold"/>
+    <TextBlock Grid.Row="1" Text="{Binding SummaryText}" Opacity="0.85"/>
+
+    <ScrollViewer Grid.Row="2">
+      <ItemsControl ItemsSource="{Binding Payments}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="vm:PaymentRow">
+            <Border Padding="8" Margin="0,3" CornerRadius="4" BorderThickness="1" BorderBrush="#30FFFFFF">
+              <Grid ColumnDefinitions="140,80,80,80,80,1*,Auto" ColumnSpacing="8">
+                <TextBlock Text="{Binding WorkerName}" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                <TextBlock Grid.Column="1" Text="{Binding TypeText}" VerticalAlignment="Center" Opacity="0.85"/>
+                <TextBlock Grid.Column="2" Text="{Binding MethodText}" VerticalAlignment="Center" Opacity="0.85"/>
+                <TextBlock Grid.Column="3" Text="{Binding DateText}" VerticalAlignment="Center" Opacity="0.85"/>
+                <TextBlock Grid.Column="4" Text="{Binding AmountText}" FontWeight="SemiBold"
+                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="5" Text="{Binding Comment}" VerticalAlignment="Center"/>
+                <Button Grid.Column="6" Classes="theme-outline" Content="✕"
+                        Click="OnDeletePayment" CommandParameter="{Binding}"/>
+              </Grid>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+
+    <!-- Форма добавления -->
+    <Grid Grid.Row="3" ColumnDefinitions="Auto,120,Auto,110,Auto,100,Auto,90,*" ColumnSpacing="8">
+      <TextBlock Text="Работник:" VerticalAlignment="Center"/>
+      <ComboBox Grid.Column="1" MinWidth="120" ItemsSource="{Binding Workers}"
+                SelectedItem="{Binding SelectedWorker}">
+        <ComboBox.ItemTemplate>
+          <DataTemplate x:DataType="core:Worker">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <TextBlock Text="{Binding FullName}"/>
+              <TextBlock Text="{Binding StatusName}" Opacity="0.6" FontSize="11" VerticalAlignment="Center"/>
+            </StackPanel>
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+      <TextBlock Grid.Column="2" Text="Тип:" VerticalAlignment="Center"/>
+      <ComboBox Grid.Column="3" MinWidth="110" ItemsSource="{Binding Types}"
+                SelectedItem="{Binding SelectedType}"/>
+      <TextBlock Grid.Column="4" Text="Способ:" VerticalAlignment="Center"/>
+      <ComboBox Grid.Column="5" MinWidth="100" ItemsSource="{Binding Methods}"
+                SelectedItem="{Binding SelectedMethod}"/>
+      <TextBlock Grid.Column="6" Text="Сумма:" VerticalAlignment="Center"/>
+      <TextBox Grid.Column="7" Text="{Binding AmountText}" PlaceholderText="15000"/>
+      <Button Grid.Column="8" Content="+ Выплатить" Click="OnAddPayment" MinWidth="110"
+              HorizontalAlignment="Right"/>
+    </Grid>
+
+    <!-- Комментарий и закрытие -->
+    <Grid Grid.Row="4" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+      <TextBox Text="{Binding CommentText}" PlaceholderText="Комментарий (необязательно)"/>
+      <Button Grid.Column="1" Content="Закрыть" Click="OnClose" MinWidth="90"/>
+    </Grid>
+
+    <!-- Статус: сообщения валидации -->
+    <TextBlock Grid.Row="5" Text="{Binding StatusText}" Opacity="0.9"/>
+  </Grid>
+</Window>

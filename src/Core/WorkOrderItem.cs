@@ -13,6 +13,10 @@ public class WorkOrderItem
     public int WorkTypeId { get; set; }
     public WorkType? WorkType { get; set; }
 
+    /// <summary>Название раздела (текст, например «Потолок», «Стены»).</summary>
+    public string SectionName { get; set; } = "";
+
+
     /// <summary>Количество в единицах измерения вида работ.</summary>
     public decimal Quantity { get; set; }
 

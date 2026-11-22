@@ -9,6 +9,7 @@ using Prorab.UI.Modules.Home;
 using Prorab.UI.Modules.ReferenceBooks;
 using Prorab.UI.Modules.Sites;
 using Prorab.UI.Modules.Workers;
+using Prorab.UI.Modules.WorkOrders;
 using Prorab.UI.Modules.WorkTypes;
 using Prorab.UI.Navigation;
 using Prorab.UI.Services;
@@ -50,6 +51,12 @@ public static class AppServices
         .AddTransient<WorkTypesViewModel>()
 
         .AddTransient<CrewsViewModel>()
+
+        .AddSingleton<INavigationModule, WorkOrdersModule>()
+        .AddTransient<WorkOrderEditViewModel>()
+        .AddTransient<WorkOrdersViewModel>()
+        .AddTransient<WorkOrderPaymentsViewModel>()
+
 
 
         .BuildServiceProvider();

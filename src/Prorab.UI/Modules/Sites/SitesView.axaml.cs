@@ -1,9 +1,10 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
 using Prorab.Core.Models;
 using Prorab.UI.Modules.Common;
-using Microsoft.Extensions.DependencyInjection;
+using Prorab.UI.Modules.WorkOrders;
 
 namespace Prorab.UI.Modules.Sites;
 
@@ -89,6 +90,17 @@ public partial class SitesView : UserControl
         var vm = AppServices.Services.GetRequiredService<SiteStructureViewModel>();
         var dialog = new SiteStructureWindow { DataContext = vm };
         await vm.LoadAsync(site.Id, site.Name);
+        await dialog.ShowDialog(owner);
+    }
+
+    private async void OnNewOrder(object? sender, RoutedEventArgs e)
+    {
+        if ((sender as Button)?.CommandParameter is not Site site) return;
+        if (OwnerWindow is not Window owner) return;
+
+        var vm = AppServices.Services.GetRequiredService<WorkOrderEditViewModel>();
+        var dialog = new WorkOrderEditWindow { DataContext = vm };
+        await vm.LoadAsync(null, site.Id);
         await dialog.ShowDialog(owner);
     }
 

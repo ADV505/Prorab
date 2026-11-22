@@ -10,6 +10,7 @@
              xmlns:wt="using:Prorab.UI.Modules.WorkTypes"
              xmlns:w="using:Prorab.UI.Modules.Workers"
              xmlns:worker="using:Prorab.UI.Modules.Workers"
+             xmlns:workorders="using:Prorab.UI.Modules.WorkOrders"
              x:Class="Prorab.UI.App">
   <Application.DataTemplates>
     <DataTemplate DataType="{x:Type home:HomeViewModel}">
@@ -30,7 +31,9 @@
       <DataTemplate DataType="w:WorkersViewModel">
     <worker:WorkersView/>
 </DataTemplate>
-
+      <DataTemplate DataType="{x:Type workorders:WorkOrdersViewModel}">
+  <workorders:WorkOrdersView/>
+</DataTemplate>
   </Application.DataTemplates>
 
 

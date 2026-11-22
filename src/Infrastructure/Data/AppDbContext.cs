@@ -82,6 +82,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .OnDelete(DeleteBehavior.Restrict);
             b.HasOne(i => i.WorkType).WithMany().HasForeignKey(i => i.WorkTypeId)
                 .OnDelete(DeleteBehavior.Restrict);
+            b.Property(i => i.SectionName).HasMaxLength(100);
+            b.HasIndex(i => i.SectionName);
         });
 
         modelBuilder.Entity<WorkOrderPayment>(b =>

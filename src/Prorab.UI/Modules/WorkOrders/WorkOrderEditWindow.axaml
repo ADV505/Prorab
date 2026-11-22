@@ -1,0 +1,112 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Prorab.UI.Modules.WorkOrders"
+        xmlns:core="using:Prorab.Core.Models"
+        x:Class="Prorab.UI.Modules.WorkOrders.WorkOrderEditWindow"
+        x:DataType="vm:WorkOrderEditViewModel"
+        Title="Наряд" Width="1120" Height="700"
+        WindowStartupLocation="CenterOwner">
+  <Grid Margin="16" RowDefinitions="Auto,*,Auto" RowSpacing="10">
+
+    <!-- Шапка -->
+    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto,*" ColumnSpacing="8">
+      <TextBlock Text="№" VerticalAlignment="Center"/>
+      <TextBlock Grid.Column="1" Text="{Binding Number}" FontWeight="SemiBold"
+                 VerticalAlignment="Center" MinWidth="50"/>
+      <TextBlock Grid.Column="2" Text="Дата" VerticalAlignment="Center"/>
+      <DatePicker Grid.Column="3" Width="150" SelectedDate="{Binding Date}"/>
+      <TextBlock Grid.Column="4" Text="Бригада" VerticalAlignment="Center"/>
+      <ComboBox Grid.Column="5" MinWidth="180" ItemsSource="{Binding Crews}"
+                SelectedItem="{Binding SelectedCrew}">
+        <ComboBox.ItemTemplate>
+          <DataTemplate x:DataType="core:Crew">
+            <TextBlock Text="{Binding Name}"/>
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+      <TextBlock Grid.Column="6" Text="Объект" VerticalAlignment="Center"/>
+      <ComboBox Grid.Column="7" MinWidth="220" ItemsSource="{Binding Sites}"
+                SelectedItem="{Binding SelectedSite}">
+        <ComboBox.ItemTemplate>
+          <DataTemplate x:DataType="core:Site">
+            <TextBlock Text="{Binding Name}"/>
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+    </Grid>
+
+    <!-- Помещения слева, позиции справа -->
+    <Grid Grid.Row="1" ColumnDefinitions="260,*" ColumnSpacing="16">
+
+      <Grid RowDefinitions="Auto,*,Auto" RowSpacing="6">
+        <TextBlock Text="Помещения объекта" FontWeight="SemiBold"/>
+        <ScrollViewer Grid.Row="1">
+          <ItemsControl ItemsSource="{Binding RoomPicks}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:RoomPickItem">
+                <CheckBox Content="{Binding Display}" IsChecked="{Binding IsSelected}" Margin="0,2"/>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+        <Button Grid.Row="2" Classes="theme-solid accent" Content="+ Добавить позиции"
+                Click="OnAddRows" HorizontalAlignment="Stretch"/>
+      </Grid>
+
+      <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto" RowSpacing="6">
+        <TextBlock Text="Позиции наряда" FontWeight="SemiBold"/>
+        <ScrollViewer Grid.Row="1">
+          <ItemsControl ItemsSource="{Binding Rows}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:WorkOrderItemRow">
+                <Border Padding="6" Margin="0,3" CornerRadius="4" BorderThickness="1"
+                        BorderBrush="#30FFFFFF">
+                  <Grid ColumnDefinitions="150,130,210,55,85,50,50,75,Auto" ColumnSpacing="6">
+                    <ComboBox ItemsSource="{Binding $parent[ItemsControl].DataContext.AllRooms}"
+                              SelectedItem="{Binding SelectedRoom}" PlaceholderText="Помещение">
+                      <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="core:Room">
+                          <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                      </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <AutoCompleteBox Grid.Column="1" ItemsSource="{Binding SectionSuggestions}"
+                                     Text="{Binding SectionName}" PlaceholderText="Раздел"/>
+                    <ComboBox Grid.Column="2"
+                              ItemsSource="{Binding $parent[ItemsControl].DataContext.WorkTypes}"
+                              SelectedItem="{Binding SelectedWorkType}" PlaceholderText="Вид работ">
+                      <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="core:WorkType">
+                          <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                      </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBox Grid.Column="3" Text="{Binding QuantityText}" PlaceholderText="Кол-во"/>
+                    <TextBox Grid.Column="4" Text="{Binding UnitPriceText}" PlaceholderText="Цена"/>
+                    <TextBox Grid.Column="5" Text="{Binding SurchargeText}" PlaceholderText="+ %"/>
+                    <TextBox Grid.Column="6" Text="{Binding DiscountText}" PlaceholderText="− %"/>
+                    <TextBlock Grid.Column="7" Text="{Binding LineTotalText}"
+                               VerticalAlignment="Center" HorizontalAlignment="Right"
+                               FontWeight="SemiBold"/>
+                    <Button Grid.Column="8" Classes="theme-outline" Content="✕"
+                            Click="OnRemoveRow" CommandParameter="{Binding}"/>
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+        <TextBlock Grid.Row="2" FontWeight="SemiBold" FontSize="16">
+          <Run Text="Итого: "/><Run Text="{Binding TotalText}"/>
+        </TextBlock>
+      </Grid>
+    </Grid>
+
+    <!-- Низ -->
+    <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+      <TextBlock Text="{Binding StatusText}" VerticalAlignment="Center" Opacity="0.85"/>
+      <Button Grid.Column="1" Content="Сохранить" IsDefault="True" Click="OnSave" MinWidth="120"/>
+      <Button Grid.Column="2" Content="Отмена" IsCancel="True" Click="OnCancel" MinWidth="90"/>
+    </Grid>
+  </Grid>
+</Window>

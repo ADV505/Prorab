@@ -217,6 +217,11 @@ namespace Infrastructure.Migrations
                     b.Property<int>("RoomId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("SectionName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
                     b.Property<decimal?>("SurchargePercent")
                         .HasColumnType("TEXT");
 
@@ -232,6 +237,8 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("RoomId");
+
+                    b.HasIndex("SectionName");
 
                     b.HasIndex("WorkOrderId");
 
